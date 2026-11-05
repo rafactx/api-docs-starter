@@ -1,11 +1,11 @@
 # API Docs Starter
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Demo](https://img.shields.io/badge/demo-vercel-black?logo=vercel)](https://api-docs-starter-rafactx.vercel.app/)
+[![Demo](https://img.shields.io/badge/demo-cloudflare-F38020?logo=cloudflare&logoColor=white)](https://api-docs-starter.rafactx.workers.dev)
 
 Um portal de documentação de API multilíngue feito com VitePress, Vue 3 e [Scalar](https://scalar.com/). Guias e uma referência de API interativa em inglês, português, espanhol e francês, com a referência trocando para a spec do idioma da página.
 
-**Demo:** <https://api-docs-starter-rafactx.vercel.app/>
+**Demo:** <https://api-docs-starter.rafactx.workers.dev>
 
 > Also available in English: [README.md](README.md)
 
@@ -44,7 +44,7 @@ spec crua ──► hydrate ► fix ► validate ──► docs/public/openapi.<
 - **Referência da API**: `docs/.vitepress/components/ScalarApi.vue` embute o Scalar e escolhe a spec pelo idioma da página (`pt` → `openapi.pt-BR.json`, `en` → `openapi.en.json`, ...). Use `spec-url` para sobrescrever.
 - **Tema**: o Scalar roda com `theme: 'none'` e suas variáveis CSS são mapeadas para as do VitePress, então a referência segue cores, fontes e modo escuro do site. A paleta fica em `docs/.vitepress/theme/theme.css`.
 - **Componentes**: `ApiCard` (tabelas chave/descrição dos guias), `HeroSection` + `SpotlightBackground` (página inicial), Vercel Analytics.
-- **Idioma**: `docs/index.md` redireciona para o idioma do navegador; na Vercel, `/` redireciona para `/en`.
+- **Idioma**: `docs/index.md` redireciona para o idioma do navegador; `/` redireciona para `/en` (`docs/public/_redirects`).
 
 ## Usando com a sua API
 
@@ -52,7 +52,7 @@ spec crua ──► hydrate ► fix ► validate ──► docs/public/openapi.<
 2. Reescreva os guias em `docs/<lang>/` e ajuste as sidebars em `docs/.vitepress/config.ts`.
 3. Troque o bloco de marca em `docs/.vitepress/theme/theme.css` e os logos em `docs/public/`.
 4. Gere um novo `docs/public/preview.png` (1440×900 funciona bem).
-5. Publique em qualquer host estático. Na Vercel: build command `pnpm build`, output directory `docs/.vitepress/dist`.
+5. Publique em qualquer host estático. A demo roda no Cloudflare Workers Static Assets: `pnpm build && npx wrangler deploy` (configuração em `wrangler.jsonc`).
 
 ## Licença
 

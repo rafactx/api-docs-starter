@@ -1,0 +1,11 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "api-docs-starter",
+  "compatibility_date": "2026-10-01",
+  // Static VitePress build served by Workers Static Assets; `/` redirects to `/en` via docs/public/_redirects.
+  "assets": {
+    "directory": "./docs/.vitepress/dist",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  }
+}
