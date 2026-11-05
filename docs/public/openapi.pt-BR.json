@@ -1,0 +1,2286 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Shelfline Field API",
+    "version": "3.2.0",
+    "description": "A API de Campo da Shelfline permite sincronizar lojas, produtos e equipes de campo com seus próprios sistemas, planejar visitas e ler as pesquisas coletadas nas lojas.\n\nA Shelfline é uma empresa fictícia: esta API existe para demonstrar um pipeline de limpeza de OpenAPI e um portal de documentação multilíngue.",
+    "contact": {
+      "name": "Shelfline Developer Support",
+      "email": "developers@shelfline.example",
+      "url": "https://developers.shelfline.example"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://{workspace}.shelfline.example/api",
+      "description": "Produção (substitua `demo` pelo subdomínio do seu workspace)",
+      "variables": {
+        "workspace": {
+          "default": "demo",
+          "description": "Seu subdomínio da Shelfline."
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/v1/{workspaceId}/stores": {
+      "get": {
+        "tags": [
+          "Lojas"
+        ],
+        "description": "Retorna as lojas de um workspace, uma página por vez.",
+        "operationId": "list",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "ID do workspace. Toda conta de cliente tem um ou mais workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Página a ser retornada, começando em 1.",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "Itens por página (máx. 200).",
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "maximum": 200
+            }
+          },
+          {
+            "name": "enabled",
+            "in": "query",
+            "description": "Filtra pelo status de habilitação.",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lojas retornadas.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageStoreV1"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestLegacy"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedLegacy"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundLegacy"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Listar lojas (v1)"
+      },
+      "post": {
+        "tags": [
+          "Lojas"
+        ],
+        "description": "Cria uma loja. O `code` deve ser único no workspace.",
+        "operationId": "save",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "ID do workspace. Toda conta de cliente tem um ou mais workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "Loja a ser criada ou substituída.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StoreV1"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Loja criada.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoreV1"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestLegacy"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedLegacy"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundLegacy"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Criar loja (v1)"
+      }
+    },
+    "/v1/{workspaceId}/stores/{storeId}": {
+      "get": {
+        "tags": [
+          "Lojas"
+        ],
+        "description": "Retorna uma loja pelo ID.",
+        "operationId": "findById",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "ID do workspace. Toda conta de cliente tem um ou mais workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "name": "storeId",
+            "in": "path",
+            "description": "ID da loja.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "required": true
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Loja retornada.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoreV1"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestLegacy"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedLegacy"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundLegacy"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Obter loja (v1)"
+      },
+      "put": {
+        "tags": [
+          "Lojas"
+        ],
+        "description": "Substitui uma loja. Os campos omitidos são apagados.",
+        "operationId": "edit",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "ID do workspace. Toda conta de cliente tem um ou mais workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "name": "storeId",
+            "in": "path",
+            "description": "ID da loja.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "required": true
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "Loja a ser criada ou substituída.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StoreV1"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Loja atualizada.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoreV1"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestLegacy"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedLegacy"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundLegacy"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Substituir loja (v1)"
+      },
+      "delete": {
+        "tags": [
+          "Lojas"
+        ],
+        "description": "Exclui uma loja e cancela suas visitas futuras.",
+        "operationId": "delete",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "ID do workspace. Toda conta de cliente tem um ou mais workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "name": "storeId",
+            "in": "path",
+            "description": "ID da loja.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "required": true
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Loja excluída."
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestLegacy"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedLegacy"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundLegacy"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Excluir loja (v1)"
+      }
+    },
+    "/v1/{workspaceId}/malls/{mallId}": {
+      "get": {
+        "tags": [
+          "Lojas"
+        ],
+        "description": "Retorna um shopping center pelo ID.",
+        "operationId": "findById_1",
+        "parameters": [
+          {
+            "name": "mallId",
+            "in": "path",
+            "description": "ID do shopping.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "required": true
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          },
+          {
+            "$ref": "#/components/parameters/WorkspaceId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Shopping retornado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MallV1"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestLegacy"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedLegacy"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundLegacy"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Obter shopping"
+      }
+    },
+    "/v1/{workspaceId}/products": {
+      "get": {
+        "tags": [
+          "Produtos"
+        ],
+        "description": "Retorna o catálogo de produtos, uma página por vez.",
+        "operationId": "findPaginated",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "ID do workspace. Toda conta de cliente tem um ou mais workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Página a ser retornada, começando em 1.",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "Itens por página (máx. 200).",
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "maximum": 200
+            }
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Produtos retornados.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageProductV1"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestLegacy"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedLegacy"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundLegacy"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Listar produtos"
+      }
+    },
+    "/v1/{workspaceId}/products/{productId}": {
+      "get": {
+        "tags": [
+          "Produtos"
+        ],
+        "description": "Retorna um produto pelo ID.",
+        "operationId": "findById_2",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "ID do workspace. Toda conta de cliente tem um ou mais workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "name": "productId",
+            "in": "path",
+            "description": "ID do produto.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "required": true
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Produto retornado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductV1"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestLegacy"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedLegacy"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundLegacy"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Obter produto"
+      }
+    },
+    "/v1/{workspaceId}/surveys/{surveyId}/fields": {
+      "get": {
+        "tags": [
+          "Pesquisas"
+        ],
+        "description": "Retorna os campos (perguntas) de uma pesquisa, na ordem de exibição.",
+        "operationId": "formFields",
+        "parameters": [
+          {
+            "name": "surveyId",
+            "in": "path",
+            "description": "ID da pesquisa.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "required": true
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          },
+          {
+            "$ref": "#/components/parameters/WorkspaceId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Campos da pesquisa retornados.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SurveyFieldV1"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestLegacy"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedLegacy"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundLegacy"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Listar campos da pesquisa"
+      }
+    },
+    "/v3/workspaces/{workspaceId}/stores/{storeId}": {
+      "get": {
+        "tags": [
+          "Lojas"
+        ],
+        "description": "Retorna uma loja pelo ID.",
+        "operationId": "getById",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "ID do workspace. Toda conta de cliente tem um ou mais workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "name": "storeId",
+            "in": "path",
+            "description": "ID da loja.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "required": true
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          },
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Loja retornada.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoreV3"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestV3"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedV3"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundV3"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Obter loja"
+      },
+      "patch": {
+        "tags": [
+          "Lojas"
+        ],
+        "description": "Atualiza apenas os campos enviados.",
+        "operationId": "patch",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "ID do workspace. Toda conta de cliente tem um ou mais workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "name": "storeId",
+            "in": "path",
+            "description": "ID da loja.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "required": true
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          },
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "Campos a serem alterados.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StorePatchV3"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Loja atualizada.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoreV3"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestV3"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedV3"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundV3"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Atualizar loja"
+      }
+    },
+    "/v3/workspaces/{workspaceId}/chains": {
+      "get": {
+        "tags": [
+          "Lojas"
+        ],
+        "description": "Retorna todas as redes do workspace.",
+        "operationId": "findAll",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "ID do workspace. Toda conta de cliente tem um ou mais workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          },
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Redes retornadas.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ChainV3"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestV3"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedV3"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundV3"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Listar redes"
+      }
+    },
+    "/v3/workspaces/{workspaceId}/brands": {
+      "get": {
+        "tags": [
+          "Produtos"
+        ],
+        "description": "Retorna as marcas do workspace.",
+        "operationId": "findAll_1",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "ID do workspace. Toda conta de cliente tem um ou mais workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          },
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          },
+          {
+            "$ref": "#/components/parameters/BrandName"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Marcas retornadas.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BrandV3"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestV3"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedV3"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundV3"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Listar marcas"
+      }
+    },
+    "/v3/workspaces/{workspaceId}/reps": {
+      "get": {
+        "tags": [
+          "Equipe de campo"
+        ],
+        "description": "Retorna a equipe de campo, uma página por vez.",
+        "operationId": "findPaginated_1",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "ID do workspace. Toda conta de cliente tem um ou mais workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Página a ser retornada, começando em 1.",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "Itens por página (máx. 200).",
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "maximum": 200
+            }
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          },
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Promotores retornados.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageFieldRepV3"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestV3"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedV3"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundV3"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Listar promotores"
+      }
+    },
+    "/v3/workspaces/{workspaceId}/reps/{repId}": {
+      "get": {
+        "tags": [
+          "Equipe de campo"
+        ],
+        "description": "Retorna um promotor pelo ID.",
+        "operationId": "getById_1",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "ID do workspace. Toda conta de cliente tem um ou mais workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "name": "repId",
+            "in": "path",
+            "description": "ID do promotor.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "required": true
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          },
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Promotor retornado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FieldRepV3"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestV3"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedV3"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundV3"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Obter promotor"
+      }
+    },
+    "/v3/workspaces/{workspaceId}/reps/{repId}/scheduled-visits": {
+      "get": {
+        "tags": [
+          "Roteiros e visitas"
+        ],
+        "description": "Retorna as visitas do roteiro de um promotor entre duas datas.",
+        "operationId": "findScheduledVisits",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "ID do workspace. Toda conta de cliente tem um ou mais workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "name": "repId",
+            "in": "path",
+            "description": "ID do promotor.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "required": true
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "required": true,
+            "description": "Primeiro dia (inclusive).",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": true,
+            "description": "Último dia (inclusive).",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          },
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Visitas retornadas.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ScheduledVisitV3"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestV3"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedV3"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundV3"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Listar visitas agendadas"
+      },
+      "post": {
+        "tags": [
+          "Roteiros e visitas"
+        ],
+        "description": "Adiciona várias visitas ao roteiro de um promotor em uma única chamada.",
+        "operationId": "saveAll",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "ID do workspace. Toda conta de cliente tem um ou mais workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "name": "repId",
+            "in": "path",
+            "description": "ID do promotor.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "required": true
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          },
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "Visitas a serem agendadas.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ScheduledVisitInputV3"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Visitas agendadas.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ScheduledVisitV3"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestV3"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedV3"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundV3"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Agendar visitas"
+      },
+      "delete": {
+        "tags": [
+          "Roteiros e visitas"
+        ],
+        "description": "Remove várias visitas do roteiro de um promotor. As visitas já iniciadas são mantidas.",
+        "operationId": "deleteAll",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "ID do workspace. Toda conta de cliente tem um ou mais workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "name": "repId",
+            "in": "path",
+            "description": "ID do promotor.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "required": true
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          },
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          },
+          {
+            "$ref": "#/components/parameters/VisitIds"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Visitas removidas."
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestV3"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedV3"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundV3"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Desagendar visitas"
+      }
+    },
+    "/v3/workspaces/{workspaceId}/visits/{visitId}/check-ins": {
+      "get": {
+        "tags": [
+          "Roteiros e visitas"
+        ],
+        "description": "Retorna o check-in e o check-out de uma visita.",
+        "operationId": "findCheckIns",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "ID do workspace. Toda conta de cliente tem um ou mais workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "name": "visitId",
+            "in": "path",
+            "description": "ID da visita.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "required": true
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          },
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Check-ins retornados.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CheckInV3"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestV3"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedV3"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundV3"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Listar check-ins da visita"
+      }
+    },
+    "/v3/workspaces/{workspaceId}/surveys": {
+      "get": {
+        "tags": [
+          "Pesquisas"
+        ],
+        "description": "Retorna as pesquisas ativas hoje.",
+        "operationId": "formsActivated",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "ID do workspace. Toda conta de cliente tem um ou mais workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          },
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pesquisas retornadas.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SurveyV3"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestV3"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedV3"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundV3"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Listar pesquisas ativas"
+      }
+    },
+    "/v3/workspaces/{workspaceId}/surveys/{surveyId}/responses": {
+      "get": {
+        "tags": [
+          "Pesquisas"
+        ],
+        "description": "Retorna as respostas enviadas de uma pesquisa, das mais recentes para as mais antigas.",
+        "operationId": "loadData",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "ID do workspace. Toda conta de cliente tem um ou mais workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "name": "surveyId",
+            "in": "path",
+            "description": "ID da pesquisa.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "required": true
+          },
+          {
+            "name": "since",
+            "in": "query",
+            "description": "Apenas respostas enviadas após este instante (ISO 8601).",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Página a ser retornada, começando em 1.",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "Itens por página (máx. 200).",
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "maximum": 200
+            }
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          },
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Respostas retornadas.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageSurveyResponseV3"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestV3"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedV3"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundV3"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Listar respostas da pesquisa"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Address": {
+        "type": "object",
+        "description": "Um endereço postal com coordenadas.",
+        "properties": {
+          "street": {
+            "type": "string",
+            "description": "Nome da rua.",
+            "example": "Rua Augusta"
+          },
+          "number": {
+            "type": "string",
+            "description": "Número do endereço.",
+            "example": "1500"
+          },
+          "district": {
+            "type": "string",
+            "description": "Bairro.",
+            "example": "Consolação"
+          },
+          "city": {
+            "type": "string",
+            "description": "Cidade.",
+            "example": "São Paulo"
+          },
+          "postalCode": {
+            "type": "string",
+            "description": "Código postal (CEP).",
+            "example": "01304-001"
+          },
+          "latitude": {
+            "type": "number",
+            "description": "Latitude em graus decimais.",
+            "format": "double",
+            "example": -23.5558
+          },
+          "longitude": {
+            "type": "number",
+            "description": "Longitude em graus decimais.",
+            "format": "double",
+            "example": -46.6623
+          }
+        }
+      },
+      "ChainV3": {
+        "type": "object",
+        "description": "Uma rede varejista (bandeira) que agrupa lojas.",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID da rede.",
+            "format": "int64",
+            "example": 12
+          },
+          "name": {
+            "type": "string",
+            "description": "Nome da rede.",
+            "example": "Mercado Bom Preço"
+          }
+        }
+      },
+      "StoreV1": {
+        "type": "object",
+        "description": "Um ponto de venda visitado pela equipe de campo (representação legada).",
+        "required": [
+          "name",
+          "code"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID da loja.",
+            "format": "int64",
+            "readOnly": true,
+            "example": 4021
+          },
+          "name": {
+            "type": "string",
+            "description": "Nome da loja.",
+            "example": "Bom Preço - Paulista"
+          },
+          "code": {
+            "type": "string",
+            "description": "Seu próprio código para a loja, único por workspace.",
+            "example": "SP-0042"
+          },
+          "chainName": {
+            "type": "string",
+            "description": "Nome da rede à qual a loja pertence.",
+            "example": "Mercado Bom Preço"
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Indica se a loja pode receber visitas.",
+            "example": true
+          },
+          "address": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Address"
+              }
+            ],
+            "description": "Endereço da loja."
+          }
+        }
+      },
+      "StoreV3": {
+        "type": "object",
+        "description": "Um ponto de venda visitado pela equipe de campo.",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID da loja.",
+            "format": "int64",
+            "example": 4021
+          },
+          "name": {
+            "type": "string",
+            "description": "Nome da loja.",
+            "example": "Bom Preço - Paulista"
+          },
+          "code": {
+            "type": "string",
+            "description": "Seu próprio código para a loja, único por workspace.",
+            "example": "SP-0042"
+          },
+          "chain": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ChainV3"
+              }
+            ],
+            "description": "Rede à qual a loja pertence."
+          },
+          "format": {
+            "type": "string",
+            "description": "Formato da loja.",
+            "enum": [
+              "HYPERMARKET",
+              "SUPERMARKET",
+              "CONVENIENCE",
+              "PHARMACY",
+              "WHOLESALE"
+            ],
+            "example": "SUPERMARKET"
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Indica se a loja pode receber visitas.",
+            "example": true
+          },
+          "address": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Address"
+              }
+            ],
+            "description": "Endereço da loja."
+          },
+          "_link": {
+            "type": "string",
+            "description": "URL canônica deste recurso (HATEOAS).",
+            "format": "uri",
+            "readOnly": true,
+            "example": "https://demo.shelfline.example/api/v3/workspaces/7/stores/4021"
+          }
+        }
+      },
+      "StorePatchV3": {
+        "type": "object",
+        "description": "Campos que podem ser alterados com PATCH. Os campos omitidos permanecem inalterados.",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Nome da loja."
+          },
+          "code": {
+            "type": "string",
+            "description": "Seu próprio código para a loja, único por workspace."
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Indica se a loja pode receber visitas."
+          }
+        }
+      },
+      "MallV1": {
+        "type": "object",
+        "description": "Um shopping center que abriga uma ou mais lojas.",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID do shopping.",
+            "format": "int64",
+            "example": 88
+          },
+          "name": {
+            "type": "string",
+            "description": "Nome do shopping.",
+            "example": "Shopping Vila Verde"
+          },
+          "address": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Address"
+              }
+            ],
+            "description": "Endereço do shopping."
+          }
+        }
+      },
+      "BrandV3": {
+        "type": "object",
+        "description": "Uma marca de produtos.",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID da marca.",
+            "format": "int64",
+            "example": 301
+          },
+          "name": {
+            "type": "string",
+            "description": "Nome da marca.",
+            "example": "Café Aurora"
+          }
+        }
+      },
+      "ProductV1": {
+        "type": "object",
+        "description": "Um produto (SKU) auditado nas lojas.",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID do produto.",
+            "format": "int64",
+            "example": 9910
+          },
+          "name": {
+            "type": "string",
+            "description": "Nome do produto.",
+            "example": "Café Aurora Tradicional 500 g"
+          },
+          "sku": {
+            "type": "string",
+            "description": "Seu código SKU.",
+            "example": "AUR-TRAD-500"
+          },
+          "barcode": {
+            "type": "string",
+            "description": "Código de barras EAN-13.",
+            "example": "7891234567895"
+          },
+          "brand": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/BrandV3"
+              }
+            ],
+            "description": "Marca do produto."
+          },
+          "category": {
+            "type": "string",
+            "description": "Nome da categoria.",
+            "example": "Coffee"
+          }
+        }
+      },
+      "FieldRepV3": {
+        "type": "object",
+        "description": "Um promotor que visita lojas.",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID do promotor.",
+            "format": "int64",
+            "example": 57
+          },
+          "name": {
+            "type": "string",
+            "description": "Nome completo.",
+            "example": "Ana Costa"
+          },
+          "email": {
+            "type": "string",
+            "description": "E-mail corporativo, também usado como login.",
+            "format": "email",
+            "example": "ana.costa@example.com"
+          },
+          "phone": {
+            "type": "string",
+            "description": "Celular no formato E.164.",
+            "example": "+5511987654321"
+          },
+          "team": {
+            "type": "string",
+            "description": "Equipe à qual o promotor pertence.",
+            "example": "São Paulo - Capital"
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Indica se o promotor pode fazer login no aplicativo móvel.",
+            "example": true
+          }
+        }
+      },
+      "ScheduledVisitV3": {
+        "type": "object",
+        "description": "Uma visita planejada no roteiro de um promotor.",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID da visita.",
+            "format": "int64",
+            "example": 120554
+          },
+          "storeId": {
+            "type": "integer",
+            "description": "Loja a ser visitada.",
+            "format": "int64",
+            "example": 4021
+          },
+          "date": {
+            "type": "string",
+            "description": "Data da visita.",
+            "format": "date",
+            "example": "2025-03-14"
+          },
+          "plannedStart": {
+            "type": "string",
+            "description": "Horário de início planejado (HH:mm, horário local da loja).",
+            "example": "09:30"
+          },
+          "status": {
+            "type": "string",
+            "description": "Status da visita.",
+            "enum": [
+              "SCHEDULED",
+              "IN_PROGRESS",
+              "DONE",
+              "MISSED"
+            ],
+            "example": "SCHEDULED"
+          }
+        }
+      },
+      "ScheduledVisitInputV3": {
+        "type": "object",
+        "description": "Uma visita a ser adicionada ao roteiro de um promotor.",
+        "required": [
+          "storeId",
+          "date"
+        ],
+        "properties": {
+          "storeId": {
+            "type": "integer",
+            "description": "Loja a ser visitada.",
+            "format": "int64",
+            "example": 4021
+          },
+          "date": {
+            "type": "string",
+            "description": "Data da visita.",
+            "format": "date",
+            "example": "2025-03-14"
+          },
+          "plannedStart": {
+            "type": "string",
+            "description": "Horário de início planejado (HH:mm, horário local da loja).",
+            "example": "09:30"
+          }
+        }
+      },
+      "CheckInV3": {
+        "type": "object",
+        "description": "Um check-in ou check-out geolocalizado registrado pelo aplicativo móvel.",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID do check-in.",
+            "format": "int64",
+            "example": 88123
+          },
+          "type": {
+            "type": "string",
+            "description": "Indica se o promotor chegou ou saiu.",
+            "enum": [
+              "CHECK_IN",
+              "CHECK_OUT"
+            ],
+            "example": "CHECK_IN"
+          },
+          "timestamp": {
+            "type": "string",
+            "description": "Quando ocorreu (ISO 8601, UTC).",
+            "format": "date-time",
+            "example": "2025-03-14T12:31:05Z"
+          },
+          "latitude": {
+            "type": "number",
+            "description": "Latitude em graus decimais.",
+            "format": "double",
+            "example": -23.5558
+          },
+          "longitude": {
+            "type": "number",
+            "description": "Longitude em graus decimais.",
+            "format": "double",
+            "example": -46.6623
+          },
+          "distanceMeters": {
+            "type": "integer",
+            "description": "Distância da loja no momento em que o check-in foi registrado.",
+            "example": 18
+          }
+        }
+      },
+      "SurveyV3": {
+        "type": "object",
+        "description": "Um formulário preenchido pela equipe de campo durante as visitas (auditoria de gôndola, pesquisa de preços etc.).",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID da pesquisa.",
+            "format": "int64",
+            "example": 640
+          },
+          "name": {
+            "type": "string",
+            "description": "Nome da pesquisa.",
+            "example": "Shelf share - coffee"
+          },
+          "startDate": {
+            "type": "string",
+            "description": "Primeiro dia em que a pesquisa está ativa.",
+            "format": "date",
+            "example": "2025-03-01"
+          },
+          "endDate": {
+            "type": "string",
+            "description": "Último dia em que a pesquisa está ativa.",
+            "format": "date",
+            "example": "2025-03-31"
+          }
+        }
+      },
+      "SurveyFieldV1": {
+        "type": "object",
+        "description": "Uma pergunta de uma pesquisa.",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID do campo.",
+            "format": "int64",
+            "example": 7712
+          },
+          "label": {
+            "type": "string",
+            "description": "Pergunta exibida ao promotor.",
+            "example": "Shelf price (R$)"
+          },
+          "type": {
+            "type": "string",
+            "description": "Tipo de resposta.",
+            "enum": [
+              "TEXT",
+              "NUMBER",
+              "MONEY",
+              "SINGLE_CHOICE",
+              "MULTIPLE_CHOICE",
+              "PHOTO"
+            ],
+            "example": "MONEY"
+          },
+          "required": {
+            "type": "boolean",
+            "description": "Indica se a resposta é obrigatória.",
+            "example": true
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Respostas permitidas para campos de escolha."
+          }
+        }
+      },
+      "SurveyAnswerV3": {
+        "type": "object",
+        "description": "A resposta a um campo da pesquisa.",
+        "properties": {
+          "fieldId": {
+            "type": "integer",
+            "description": "ID do campo da pesquisa.",
+            "format": "int64",
+            "example": 7712
+          },
+          "value": {
+            "type": "string",
+            "description": "Resposta, serializada como texto. As fotos são retornadas como URLs.",
+            "example": "21.90"
+          }
+        }
+      },
+      "SurveyResponseV3": {
+        "type": "object",
+        "description": "Uma pesquisa concluída, conforme enviada de uma loja.",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID da resposta.",
+            "format": "int64",
+            "example": 550123
+          },
+          "storeId": {
+            "type": "integer",
+            "description": "Loja a ser visitada.",
+            "format": "int64",
+            "example": 4021
+          },
+          "repId": {
+            "type": "integer",
+            "description": "Promotor que enviou a resposta.",
+            "format": "int64",
+            "example": 57
+          },
+          "submittedAt": {
+            "type": "string",
+            "description": "Horário de envio (ISO 8601, UTC).",
+            "format": "date-time",
+            "example": "2025-03-14T12:58:40Z"
+          },
+          "answers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SurveyAnswerV3"
+            },
+            "description": "Respostas, uma por campo."
+          }
+        }
+      },
+      "PageStoreV1": {
+        "type": "object",
+        "description": "Uma página de resultados.",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StoreV1"
+            },
+            "description": "Itens desta página."
+          },
+          "page": {
+            "type": "integer",
+            "description": "Página atual, começando em 1.",
+            "example": 1
+          },
+          "size": {
+            "type": "integer",
+            "description": "Tamanho da página.",
+            "example": 50
+          },
+          "totalItems": {
+            "type": "integer",
+            "description": "Número total de itens em todas as páginas.",
+            "format": "int64",
+            "example": 1280
+          }
+        }
+      },
+      "PageProductV1": {
+        "type": "object",
+        "description": "Uma página de resultados.",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductV1"
+            },
+            "description": "Itens desta página."
+          },
+          "page": {
+            "type": "integer",
+            "description": "Página atual, começando em 1.",
+            "example": 1
+          },
+          "size": {
+            "type": "integer",
+            "description": "Tamanho da página.",
+            "example": 50
+          },
+          "totalItems": {
+            "type": "integer",
+            "description": "Número total de itens em todas as páginas.",
+            "format": "int64",
+            "example": 1280
+          }
+        }
+      },
+      "PageFieldRepV3": {
+        "type": "object",
+        "description": "Uma página de resultados.",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FieldRepV3"
+            },
+            "description": "Itens desta página."
+          },
+          "page": {
+            "type": "integer",
+            "description": "Página atual, começando em 1.",
+            "example": 1
+          },
+          "size": {
+            "type": "integer",
+            "description": "Tamanho da página.",
+            "example": 50
+          },
+          "totalItems": {
+            "type": "integer",
+            "description": "Número total de itens em todas as páginas.",
+            "format": "int64",
+            "example": 1280
+          }
+        }
+      },
+      "PageSurveyResponseV3": {
+        "type": "object",
+        "description": "Uma página de resultados.",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SurveyResponseV3"
+            },
+            "description": "Itens desta página."
+          },
+          "page": {
+            "type": "integer",
+            "description": "Página atual, começando em 1.",
+            "example": 1
+          },
+          "size": {
+            "type": "integer",
+            "description": "Tamanho da página.",
+            "example": 50
+          },
+          "totalItems": {
+            "type": "integer",
+            "description": "Número total de itens em todas as páginas.",
+            "format": "int64",
+            "example": 1280
+          }
+        }
+      },
+      "ErrorV3": {
+        "type": "object",
+        "description": "Corpo de erro retornado pelos endpoints v3.",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "description": "Código de status HTTP.",
+            "example": 400
+          },
+          "code": {
+            "type": "string",
+            "description": "Código de erro estável, legível por máquina.",
+            "example": "INVALID_FIELD"
+          },
+          "message": {
+            "type": "string",
+            "description": "Mensagem legível por humanos.",
+            "example": "Request validation failed."
+          },
+          "details": {
+            "type": "array",
+            "description": "Problemas por campo, quando o corpo da requisição é inválido.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "field": {
+                  "type": "string",
+                  "example": "code"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "must be unique in the workspace"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ErrorLegacy": {
+        "type": "object",
+        "description": "Corpo de erro retornado pelos endpoints legados da v1.",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "description": "Código de erro numérico.",
+            "example": 1001
+          },
+          "message": {
+            "type": "string",
+            "description": "Mensagem legível por humanos.",
+            "example": "Store not found"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic",
+        "description": "Autenticação HTTP Basic. Envie `Authorization: Basic base64(username:password)` usando um usuário de integração criado no painel de administração da Shelfline."
+      }
+    },
+    "responses": {
+      "BadRequestV3": {
+        "description": "A requisição está malformada ou um campo é inválido.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorV3"
+            }
+          }
+        }
+      },
+      "UnauthorizedV3": {
+        "description": "Credenciais ausentes ou inválidas.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorV3"
+            }
+          }
+        }
+      },
+      "NotFoundV3": {
+        "description": "O recurso não existe neste workspace.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorV3"
+            }
+          }
+        }
+      },
+      "TooManyRequests": {
+        "description": "Muitas requisições. Tente novamente após o número de segundos indicado em `Retry-After`.",
+        "headers": {
+          "Retry-After": {
+            "schema": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "BadRequestLegacy": {
+        "description": "A requisição está malformada ou um campo é inválido.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorLegacy"
+            }
+          }
+        }
+      },
+      "UnauthorizedLegacy": {
+        "description": "Credenciais ausentes ou inválidas.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorLegacy"
+            }
+          }
+        }
+      },
+      "NotFoundLegacy": {
+        "description": "O recurso não existe neste workspace.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorLegacy"
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "WorkspaceId": {
+        "name": "workspaceId",
+        "in": "path",
+        "required": true,
+        "description": "ID do workspace. Toda conta de cliente tem um ou mais workspaces.",
+        "schema": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "example": 7
+      },
+      "VisitIds": {
+        "name": "visitIds",
+        "in": "query",
+        "required": true,
+        "description": "IDs das visitas a serem removidas, separados por vírgula.",
+        "style": "form",
+        "explode": false,
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "example": [
+          120554,
+          120555
+        ]
+      },
+      "BrandName": {
+        "name": "name",
+        "in": "query",
+        "description": "Filtra as marcas cujo nome contém este texto.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "ClientName": {
+        "name": "X-Client-Name",
+        "in": "header",
+        "required": true,
+        "description": "Nome da sua integração, usado nos logs de auditoria e no controle de limite de requisições (por exemplo, `erp-sync`).",
+        "schema": {
+          "type": "string"
+        },
+        "example": "erp-sync"
+      },
+      "ApiVersion": {
+        "name": "Api-Version",
+        "in": "header",
+        "description": "Versão da API para os endpoints v3, como uma data de lançamento (`YYYY-MM-DD`). Ignorada pela v1.",
+        "schema": {
+          "type": "string",
+          "default": "2025-01-15"
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Lojas",
+      "description": "Lojas, redes e shoppings onde a equipe de campo atua."
+    },
+    {
+      "name": "Produtos",
+      "description": "Catálogo de produtos e marcas auditados durante as visitas."
+    },
+    {
+      "name": "Equipe de campo",
+      "description": "Promotores e suas equipes."
+    },
+    {
+      "name": "Roteiros e visitas",
+      "description": "Roteiros, visitas agendadas e check-ins geolocalizados."
+    },
+    {
+      "name": "Pesquisas",
+      "description": "Formulários preenchidos durante as visitas e as respostas coletadas."
+    }
+  ]
+}

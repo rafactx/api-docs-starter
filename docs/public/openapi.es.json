@@ -1,0 +1,2286 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Shelfline Field API",
+    "version": "3.2.0",
+    "description": "La API de Shelfline Field te permite sincronizar tiendas, productos y equipos de campo con tus propios sistemas, planificar visitas y leer las encuestas recopiladas en las tiendas.\n\nShelfline es una empresa ficticia: esta API existe para demostrar un pipeline de depuración de OpenAPI y un portal de documentación multilingüe.",
+    "contact": {
+      "name": "Shelfline Developer Support",
+      "email": "developers@shelfline.example",
+      "url": "https://developers.shelfline.example"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://{workspace}.shelfline.example/api",
+      "description": "Producción (reemplaza `demo` por el subdominio de tu workspace)",
+      "variables": {
+        "workspace": {
+          "default": "demo",
+          "description": "Tu subdominio de Shelfline."
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/v1/{workspaceId}/stores": {
+      "get": {
+        "tags": [
+          "Tiendas"
+        ],
+        "description": "Devuelve las tiendas de un workspace, una página a la vez.",
+        "operationId": "list",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "ID del workspace. Cada cuenta de cliente tiene uno o más workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Página que se devolverá, comenzando en 1.",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "Elementos por página (máx. 200).",
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "maximum": 200
+            }
+          },
+          {
+            "name": "enabled",
+            "in": "query",
+            "description": "Filtra por estado de habilitación.",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tiendas devueltas.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageStoreV1"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestLegacy"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedLegacy"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundLegacy"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Listar tiendas (v1)"
+      },
+      "post": {
+        "tags": [
+          "Tiendas"
+        ],
+        "description": "Crea una tienda. `code` debe ser único en el workspace.",
+        "operationId": "save",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "ID del workspace. Cada cuenta de cliente tiene uno o más workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "Tienda que se va a crear o reemplazar.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StoreV1"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Tienda creada.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoreV1"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestLegacy"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedLegacy"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundLegacy"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Crear tienda (v1)"
+      }
+    },
+    "/v1/{workspaceId}/stores/{storeId}": {
+      "get": {
+        "tags": [
+          "Tiendas"
+        ],
+        "description": "Devuelve una tienda por su ID.",
+        "operationId": "findById",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "ID del workspace. Cada cuenta de cliente tiene uno o más workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "name": "storeId",
+            "in": "path",
+            "description": "ID de la tienda.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "required": true
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tienda devuelta.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoreV1"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestLegacy"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedLegacy"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundLegacy"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Obtener tienda (v1)"
+      },
+      "put": {
+        "tags": [
+          "Tiendas"
+        ],
+        "description": "Reemplaza una tienda. Los campos que omitas se borran.",
+        "operationId": "edit",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "ID del workspace. Cada cuenta de cliente tiene uno o más workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "name": "storeId",
+            "in": "path",
+            "description": "ID de la tienda.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "required": true
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "Tienda que se va a crear o reemplazar.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StoreV1"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Tienda actualizada.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoreV1"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestLegacy"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedLegacy"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundLegacy"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Reemplazar tienda (v1)"
+      },
+      "delete": {
+        "tags": [
+          "Tiendas"
+        ],
+        "description": "Elimina una tienda y cancela sus visitas futuras.",
+        "operationId": "delete",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "ID del workspace. Cada cuenta de cliente tiene uno o más workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "name": "storeId",
+            "in": "path",
+            "description": "ID de la tienda.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "required": true
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Tienda eliminada."
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestLegacy"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedLegacy"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundLegacy"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Eliminar tienda (v1)"
+      }
+    },
+    "/v1/{workspaceId}/malls/{mallId}": {
+      "get": {
+        "tags": [
+          "Tiendas"
+        ],
+        "description": "Devuelve un centro comercial por su ID.",
+        "operationId": "findById_1",
+        "parameters": [
+          {
+            "name": "mallId",
+            "in": "path",
+            "description": "ID del centro comercial.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "required": true
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          },
+          {
+            "$ref": "#/components/parameters/WorkspaceId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Centro comercial devuelto.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MallV1"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestLegacy"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedLegacy"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundLegacy"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Obtener centro comercial"
+      }
+    },
+    "/v1/{workspaceId}/products": {
+      "get": {
+        "tags": [
+          "Productos"
+        ],
+        "description": "Devuelve el catálogo de productos, una página a la vez.",
+        "operationId": "findPaginated",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "ID del workspace. Cada cuenta de cliente tiene uno o más workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Página que se devolverá, comenzando en 1.",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "Elementos por página (máx. 200).",
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "maximum": 200
+            }
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Productos devueltos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageProductV1"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestLegacy"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedLegacy"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundLegacy"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Listar productos"
+      }
+    },
+    "/v1/{workspaceId}/products/{productId}": {
+      "get": {
+        "tags": [
+          "Productos"
+        ],
+        "description": "Devuelve un producto por su ID.",
+        "operationId": "findById_2",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "ID del workspace. Cada cuenta de cliente tiene uno o más workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "name": "productId",
+            "in": "path",
+            "description": "ID del producto.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "required": true
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Producto devuelto.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductV1"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestLegacy"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedLegacy"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundLegacy"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Obtener producto"
+      }
+    },
+    "/v1/{workspaceId}/surveys/{surveyId}/fields": {
+      "get": {
+        "tags": [
+          "Encuestas"
+        ],
+        "description": "Devuelve los campos (preguntas) de una encuesta, en orden de presentación.",
+        "operationId": "formFields",
+        "parameters": [
+          {
+            "name": "surveyId",
+            "in": "path",
+            "description": "ID de la encuesta.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "required": true
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          },
+          {
+            "$ref": "#/components/parameters/WorkspaceId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Campos de la encuesta devueltos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SurveyFieldV1"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestLegacy"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedLegacy"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundLegacy"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Listar campos de encuesta"
+      }
+    },
+    "/v3/workspaces/{workspaceId}/stores/{storeId}": {
+      "get": {
+        "tags": [
+          "Tiendas"
+        ],
+        "description": "Devuelve una tienda por su ID.",
+        "operationId": "getById",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "ID del workspace. Cada cuenta de cliente tiene uno o más workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "name": "storeId",
+            "in": "path",
+            "description": "ID de la tienda.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "required": true
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          },
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tienda devuelta.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoreV3"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestV3"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedV3"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundV3"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Obtener tienda"
+      },
+      "patch": {
+        "tags": [
+          "Tiendas"
+        ],
+        "description": "Actualiza solo los campos que envíes.",
+        "operationId": "patch",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "ID del workspace. Cada cuenta de cliente tiene uno o más workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "name": "storeId",
+            "in": "path",
+            "description": "ID de la tienda.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "required": true
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          },
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "Campos que se van a modificar.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StorePatchV3"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Tienda actualizada.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoreV3"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestV3"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedV3"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundV3"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Actualizar tienda"
+      }
+    },
+    "/v3/workspaces/{workspaceId}/chains": {
+      "get": {
+        "tags": [
+          "Tiendas"
+        ],
+        "description": "Devuelve todas las cadenas del workspace.",
+        "operationId": "findAll",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "ID del workspace. Cada cuenta de cliente tiene uno o más workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          },
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cadenas devueltas.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ChainV3"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestV3"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedV3"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundV3"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Listar cadenas"
+      }
+    },
+    "/v3/workspaces/{workspaceId}/brands": {
+      "get": {
+        "tags": [
+          "Productos"
+        ],
+        "description": "Devuelve las marcas del workspace.",
+        "operationId": "findAll_1",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "ID del workspace. Cada cuenta de cliente tiene uno o más workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          },
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          },
+          {
+            "$ref": "#/components/parameters/BrandName"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Marcas devueltas.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BrandV3"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestV3"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedV3"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundV3"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Listar marcas"
+      }
+    },
+    "/v3/workspaces/{workspaceId}/reps": {
+      "get": {
+        "tags": [
+          "Equipo de campo"
+        ],
+        "description": "Devuelve el equipo de campo, una página a la vez.",
+        "operationId": "findPaginated_1",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "ID del workspace. Cada cuenta de cliente tiene uno o más workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Página que se devolverá, comenzando en 1.",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "Elementos por página (máx. 200).",
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "maximum": 200
+            }
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          },
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Representantes de campo devueltos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageFieldRepV3"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestV3"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedV3"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundV3"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Listar representantes de campo"
+      }
+    },
+    "/v3/workspaces/{workspaceId}/reps/{repId}": {
+      "get": {
+        "tags": [
+          "Equipo de campo"
+        ],
+        "description": "Devuelve un representante de campo por su ID.",
+        "operationId": "getById_1",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "ID del workspace. Cada cuenta de cliente tiene uno o más workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "name": "repId",
+            "in": "path",
+            "description": "ID del representante de campo.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "required": true
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          },
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Representante de campo devuelto.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FieldRepV3"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestV3"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedV3"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundV3"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Obtener representante de campo"
+      }
+    },
+    "/v3/workspaces/{workspaceId}/reps/{repId}/scheduled-visits": {
+      "get": {
+        "tags": [
+          "Rutas y visitas"
+        ],
+        "description": "Devuelve las visitas de la ruta de un representante entre dos fechas.",
+        "operationId": "findScheduledVisits",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "ID del workspace. Cada cuenta de cliente tiene uno o más workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "name": "repId",
+            "in": "path",
+            "description": "ID del representante de campo.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "required": true
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "required": true,
+            "description": "Primer día (inclusive).",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": true,
+            "description": "Último día (inclusive).",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          },
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Visitas devueltas.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ScheduledVisitV3"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestV3"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedV3"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundV3"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Listar visitas programadas"
+      },
+      "post": {
+        "tags": [
+          "Rutas y visitas"
+        ],
+        "description": "Agrega varias visitas a la ruta de un representante en una sola llamada.",
+        "operationId": "saveAll",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "ID del workspace. Cada cuenta de cliente tiene uno o más workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "name": "repId",
+            "in": "path",
+            "description": "ID del representante de campo.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "required": true
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          },
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "Visitas que se van a programar.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ScheduledVisitInputV3"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Visitas programadas.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ScheduledVisitV3"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestV3"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedV3"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundV3"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Programar visitas"
+      },
+      "delete": {
+        "tags": [
+          "Rutas y visitas"
+        ],
+        "description": "Elimina varias visitas de la ruta de un representante. Las visitas ya iniciadas se conservan.",
+        "operationId": "deleteAll",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "ID del workspace. Cada cuenta de cliente tiene uno o más workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "name": "repId",
+            "in": "path",
+            "description": "ID del representante de campo.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "required": true
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          },
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          },
+          {
+            "$ref": "#/components/parameters/VisitIds"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Visitas eliminadas."
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestV3"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedV3"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundV3"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Cancelar visitas"
+      }
+    },
+    "/v3/workspaces/{workspaceId}/visits/{visitId}/check-ins": {
+      "get": {
+        "tags": [
+          "Rutas y visitas"
+        ],
+        "description": "Devuelve el check-in y el check-out de una visita.",
+        "operationId": "findCheckIns",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "ID del workspace. Cada cuenta de cliente tiene uno o más workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "name": "visitId",
+            "in": "path",
+            "description": "ID de la visita.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "required": true
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          },
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Check-ins devueltos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CheckInV3"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestV3"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedV3"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundV3"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Listar check-ins de la visita"
+      }
+    },
+    "/v3/workspaces/{workspaceId}/surveys": {
+      "get": {
+        "tags": [
+          "Encuestas"
+        ],
+        "description": "Devuelve las encuestas activas hoy.",
+        "operationId": "formsActivated",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "ID del workspace. Cada cuenta de cliente tiene uno o más workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          },
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Encuestas devueltas.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SurveyV3"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestV3"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedV3"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundV3"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Listar encuestas activas"
+      }
+    },
+    "/v3/workspaces/{workspaceId}/surveys/{surveyId}/responses": {
+      "get": {
+        "tags": [
+          "Encuestas"
+        ],
+        "description": "Devuelve las respuestas enviadas de una encuesta, las más recientes primero.",
+        "operationId": "loadData",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "ID del workspace. Cada cuenta de cliente tiene uno o más workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "name": "surveyId",
+            "in": "path",
+            "description": "ID de la encuesta.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "required": true
+          },
+          {
+            "name": "since",
+            "in": "query",
+            "description": "Solo las respuestas enviadas después de este instante (ISO 8601).",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Página que se devolverá, comenzando en 1.",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "Elementos por página (máx. 200).",
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "maximum": 200
+            }
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          },
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Respuestas devueltas.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageSurveyResponseV3"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestV3"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedV3"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundV3"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Listar respuestas de encuestas"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Address": {
+        "type": "object",
+        "description": "Una dirección postal con coordenadas.",
+        "properties": {
+          "street": {
+            "type": "string",
+            "description": "Nombre de la calle.",
+            "example": "Rua Augusta"
+          },
+          "number": {
+            "type": "string",
+            "description": "Número de la calle.",
+            "example": "1500"
+          },
+          "district": {
+            "type": "string",
+            "description": "Distrito o barrio.",
+            "example": "Consolação"
+          },
+          "city": {
+            "type": "string",
+            "description": "Ciudad.",
+            "example": "São Paulo"
+          },
+          "postalCode": {
+            "type": "string",
+            "description": "Código postal.",
+            "example": "01304-001"
+          },
+          "latitude": {
+            "type": "number",
+            "description": "Latitud en grados decimales.",
+            "format": "double",
+            "example": -23.5558
+          },
+          "longitude": {
+            "type": "number",
+            "description": "Longitud en grados decimales.",
+            "format": "double",
+            "example": -46.6623
+          }
+        }
+      },
+      "ChainV3": {
+        "type": "object",
+        "description": "Una cadena minorista (marca) que agrupa tiendas.",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID de la cadena.",
+            "format": "int64",
+            "example": 12
+          },
+          "name": {
+            "type": "string",
+            "description": "Nombre de la cadena.",
+            "example": "Mercado Bom Preço"
+          }
+        }
+      },
+      "StoreV1": {
+        "type": "object",
+        "description": "Un punto de venta visitado por el equipo de campo (representación heredada).",
+        "required": [
+          "name",
+          "code"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID de la tienda.",
+            "format": "int64",
+            "readOnly": true,
+            "example": 4021
+          },
+          "name": {
+            "type": "string",
+            "description": "Nombre de la tienda.",
+            "example": "Bom Preço - Paulista"
+          },
+          "code": {
+            "type": "string",
+            "description": "Código propio de la tienda, único por workspace.",
+            "example": "SP-0042"
+          },
+          "chainName": {
+            "type": "string",
+            "description": "Nombre de la cadena a la que pertenece la tienda.",
+            "example": "Mercado Bom Preço"
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Indica si la tienda puede recibir visitas.",
+            "example": true
+          },
+          "address": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Address"
+              }
+            ],
+            "description": "Dirección de la tienda."
+          }
+        }
+      },
+      "StoreV3": {
+        "type": "object",
+        "description": "Un punto de venta visitado por el equipo de campo.",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID de la tienda.",
+            "format": "int64",
+            "example": 4021
+          },
+          "name": {
+            "type": "string",
+            "description": "Nombre de la tienda.",
+            "example": "Bom Preço - Paulista"
+          },
+          "code": {
+            "type": "string",
+            "description": "Código propio de la tienda, único por workspace.",
+            "example": "SP-0042"
+          },
+          "chain": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ChainV3"
+              }
+            ],
+            "description": "Cadena a la que pertenece la tienda."
+          },
+          "format": {
+            "type": "string",
+            "description": "Formato de la tienda.",
+            "enum": [
+              "HYPERMARKET",
+              "SUPERMARKET",
+              "CONVENIENCE",
+              "PHARMACY",
+              "WHOLESALE"
+            ],
+            "example": "SUPERMARKET"
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Indica si la tienda puede recibir visitas.",
+            "example": true
+          },
+          "address": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Address"
+              }
+            ],
+            "description": "Dirección de la tienda."
+          },
+          "_link": {
+            "type": "string",
+            "description": "URL canónica de este recurso (HATEOAS).",
+            "format": "uri",
+            "readOnly": true,
+            "example": "https://demo.shelfline.example/api/v3/workspaces/7/stores/4021"
+          }
+        }
+      },
+      "StorePatchV3": {
+        "type": "object",
+        "description": "Campos que se pueden modificar con PATCH. Los campos omitidos no se alteran.",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Nombre de la tienda."
+          },
+          "code": {
+            "type": "string",
+            "description": "Código propio de la tienda, único por workspace."
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Indica si la tienda puede recibir visitas."
+          }
+        }
+      },
+      "MallV1": {
+        "type": "object",
+        "description": "Un centro comercial que alberga una o más tiendas.",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID del centro comercial.",
+            "format": "int64",
+            "example": 88
+          },
+          "name": {
+            "type": "string",
+            "description": "Nombre del centro comercial.",
+            "example": "Shopping Vila Verde"
+          },
+          "address": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Address"
+              }
+            ],
+            "description": "Dirección del centro comercial."
+          }
+        }
+      },
+      "BrandV3": {
+        "type": "object",
+        "description": "Una marca de producto.",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID de la marca.",
+            "format": "int64",
+            "example": 301
+          },
+          "name": {
+            "type": "string",
+            "description": "Nombre de la marca.",
+            "example": "Café Aurora"
+          }
+        }
+      },
+      "ProductV1": {
+        "type": "object",
+        "description": "Un producto (SKU) auditado en las tiendas.",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID del producto.",
+            "format": "int64",
+            "example": 9910
+          },
+          "name": {
+            "type": "string",
+            "description": "Nombre del producto.",
+            "example": "Café Aurora Tradicional 500 g"
+          },
+          "sku": {
+            "type": "string",
+            "description": "Tu código SKU.",
+            "example": "AUR-TRAD-500"
+          },
+          "barcode": {
+            "type": "string",
+            "description": "Código de barras EAN-13.",
+            "example": "7891234567895"
+          },
+          "brand": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/BrandV3"
+              }
+            ],
+            "description": "Marca del producto."
+          },
+          "category": {
+            "type": "string",
+            "description": "Nombre de la categoría.",
+            "example": "Coffee"
+          }
+        }
+      },
+      "FieldRepV3": {
+        "type": "object",
+        "description": "Un representante de campo que visita tiendas.",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID del representante de campo.",
+            "format": "int64",
+            "example": 57
+          },
+          "name": {
+            "type": "string",
+            "description": "Nombre completo.",
+            "example": "Ana Costa"
+          },
+          "email": {
+            "type": "string",
+            "description": "Correo electrónico de trabajo, también usado como inicio de sesión.",
+            "format": "email",
+            "example": "ana.costa@example.com"
+          },
+          "phone": {
+            "type": "string",
+            "description": "Teléfono móvil en formato E.164.",
+            "example": "+5511987654321"
+          },
+          "team": {
+            "type": "string",
+            "description": "Equipo al que pertenece el representante.",
+            "example": "São Paulo - Capital"
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Indica si el representante puede iniciar sesión en la app móvil.",
+            "example": true
+          }
+        }
+      },
+      "ScheduledVisitV3": {
+        "type": "object",
+        "description": "Una visita planificada en la ruta de un representante.",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID de la visita.",
+            "format": "int64",
+            "example": 120554
+          },
+          "storeId": {
+            "type": "integer",
+            "description": "Tienda que se va a visitar.",
+            "format": "int64",
+            "example": 4021
+          },
+          "date": {
+            "type": "string",
+            "description": "Fecha de la visita.",
+            "format": "date",
+            "example": "2025-03-14"
+          },
+          "plannedStart": {
+            "type": "string",
+            "description": "Hora de inicio planificada (HH:mm, hora local de la tienda).",
+            "example": "09:30"
+          },
+          "status": {
+            "type": "string",
+            "description": "Estado de la visita.",
+            "enum": [
+              "SCHEDULED",
+              "IN_PROGRESS",
+              "DONE",
+              "MISSED"
+            ],
+            "example": "SCHEDULED"
+          }
+        }
+      },
+      "ScheduledVisitInputV3": {
+        "type": "object",
+        "description": "Una visita que se agrega a la ruta de un representante.",
+        "required": [
+          "storeId",
+          "date"
+        ],
+        "properties": {
+          "storeId": {
+            "type": "integer",
+            "description": "Tienda que se va a visitar.",
+            "format": "int64",
+            "example": 4021
+          },
+          "date": {
+            "type": "string",
+            "description": "Fecha de la visita.",
+            "format": "date",
+            "example": "2025-03-14"
+          },
+          "plannedStart": {
+            "type": "string",
+            "description": "Hora de inicio planificada (HH:mm, hora local de la tienda).",
+            "example": "09:30"
+          }
+        }
+      },
+      "CheckInV3": {
+        "type": "object",
+        "description": "Un check-in o check-out geolocalizado registrado por la app móvil.",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID del check-in.",
+            "format": "int64",
+            "example": 88123
+          },
+          "type": {
+            "type": "string",
+            "description": "Indica si el representante llegó o se fue.",
+            "enum": [
+              "CHECK_IN",
+              "CHECK_OUT"
+            ],
+            "example": "CHECK_IN"
+          },
+          "timestamp": {
+            "type": "string",
+            "description": "Cuándo ocurrió (ISO 8601, UTC).",
+            "format": "date-time",
+            "example": "2025-03-14T12:31:05Z"
+          },
+          "latitude": {
+            "type": "number",
+            "description": "Latitud en grados decimales.",
+            "format": "double",
+            "example": -23.5558
+          },
+          "longitude": {
+            "type": "number",
+            "description": "Longitud en grados decimales.",
+            "format": "double",
+            "example": -46.6623
+          },
+          "distanceMeters": {
+            "type": "integer",
+            "description": "Distancia a la tienda al momento de registrar el check-in.",
+            "example": 18
+          }
+        }
+      },
+      "SurveyV3": {
+        "type": "object",
+        "description": "Un formulario que el equipo de campo completa durante las visitas (auditoría de góndola, verificación de precios, etc.).",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID de la encuesta.",
+            "format": "int64",
+            "example": 640
+          },
+          "name": {
+            "type": "string",
+            "description": "Nombre de la encuesta.",
+            "example": "Shelf share - coffee"
+          },
+          "startDate": {
+            "type": "string",
+            "description": "Primer día en que la encuesta está activa.",
+            "format": "date",
+            "example": "2025-03-01"
+          },
+          "endDate": {
+            "type": "string",
+            "description": "Último día en que la encuesta está activa.",
+            "format": "date",
+            "example": "2025-03-31"
+          }
+        }
+      },
+      "SurveyFieldV1": {
+        "type": "object",
+        "description": "Una pregunta de una encuesta.",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID del campo.",
+            "format": "int64",
+            "example": 7712
+          },
+          "label": {
+            "type": "string",
+            "description": "Pregunta que se muestra al representante.",
+            "example": "Shelf price (R$)"
+          },
+          "type": {
+            "type": "string",
+            "description": "Tipo de respuesta.",
+            "enum": [
+              "TEXT",
+              "NUMBER",
+              "MONEY",
+              "SINGLE_CHOICE",
+              "MULTIPLE_CHOICE",
+              "PHOTO"
+            ],
+            "example": "MONEY"
+          },
+          "required": {
+            "type": "boolean",
+            "description": "Indica si la respuesta es obligatoria.",
+            "example": true
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Respuestas permitidas para los campos de selección."
+          }
+        }
+      },
+      "SurveyAnswerV3": {
+        "type": "object",
+        "description": "La respuesta a un campo de la encuesta.",
+        "properties": {
+          "fieldId": {
+            "type": "integer",
+            "description": "ID del campo de la encuesta.",
+            "format": "int64",
+            "example": 7712
+          },
+          "value": {
+            "type": "string",
+            "description": "Respuesta, serializada como texto. Las fotos se devuelven como URL.",
+            "example": "21.90"
+          }
+        }
+      },
+      "SurveyResponseV3": {
+        "type": "object",
+        "description": "Una encuesta completada, tal como se envió desde una tienda.",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID de la respuesta.",
+            "format": "int64",
+            "example": 550123
+          },
+          "storeId": {
+            "type": "integer",
+            "description": "Tienda que se va a visitar.",
+            "format": "int64",
+            "example": 4021
+          },
+          "repId": {
+            "type": "integer",
+            "description": "Representante que envió la respuesta.",
+            "format": "int64",
+            "example": 57
+          },
+          "submittedAt": {
+            "type": "string",
+            "description": "Hora de envío (ISO 8601, UTC).",
+            "format": "date-time",
+            "example": "2025-03-14T12:58:40Z"
+          },
+          "answers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SurveyAnswerV3"
+            },
+            "description": "Respuestas, una por campo."
+          }
+        }
+      },
+      "PageStoreV1": {
+        "type": "object",
+        "description": "Una página de resultados.",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StoreV1"
+            },
+            "description": "Elementos de esta página."
+          },
+          "page": {
+            "type": "integer",
+            "description": "Página actual, comenzando en 1.",
+            "example": 1
+          },
+          "size": {
+            "type": "integer",
+            "description": "Tamaño de la página.",
+            "example": 50
+          },
+          "totalItems": {
+            "type": "integer",
+            "description": "Número total de elementos en todas las páginas.",
+            "format": "int64",
+            "example": 1280
+          }
+        }
+      },
+      "PageProductV1": {
+        "type": "object",
+        "description": "Una página de resultados.",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductV1"
+            },
+            "description": "Elementos de esta página."
+          },
+          "page": {
+            "type": "integer",
+            "description": "Página actual, comenzando en 1.",
+            "example": 1
+          },
+          "size": {
+            "type": "integer",
+            "description": "Tamaño de la página.",
+            "example": 50
+          },
+          "totalItems": {
+            "type": "integer",
+            "description": "Número total de elementos en todas las páginas.",
+            "format": "int64",
+            "example": 1280
+          }
+        }
+      },
+      "PageFieldRepV3": {
+        "type": "object",
+        "description": "Una página de resultados.",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FieldRepV3"
+            },
+            "description": "Elementos de esta página."
+          },
+          "page": {
+            "type": "integer",
+            "description": "Página actual, comenzando en 1.",
+            "example": 1
+          },
+          "size": {
+            "type": "integer",
+            "description": "Tamaño de la página.",
+            "example": 50
+          },
+          "totalItems": {
+            "type": "integer",
+            "description": "Número total de elementos en todas las páginas.",
+            "format": "int64",
+            "example": 1280
+          }
+        }
+      },
+      "PageSurveyResponseV3": {
+        "type": "object",
+        "description": "Una página de resultados.",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SurveyResponseV3"
+            },
+            "description": "Elementos de esta página."
+          },
+          "page": {
+            "type": "integer",
+            "description": "Página actual, comenzando en 1.",
+            "example": 1
+          },
+          "size": {
+            "type": "integer",
+            "description": "Tamaño de la página.",
+            "example": 50
+          },
+          "totalItems": {
+            "type": "integer",
+            "description": "Número total de elementos en todas las páginas.",
+            "format": "int64",
+            "example": 1280
+          }
+        }
+      },
+      "ErrorV3": {
+        "type": "object",
+        "description": "Cuerpo de error devuelto por los endpoints v3.",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "description": "Código de estado HTTP.",
+            "example": 400
+          },
+          "code": {
+            "type": "string",
+            "description": "Código de error estable y legible por máquina.",
+            "example": "INVALID_FIELD"
+          },
+          "message": {
+            "type": "string",
+            "description": "Mensaje legible para humanos.",
+            "example": "Request validation failed."
+          },
+          "details": {
+            "type": "array",
+            "description": "Problemas a nivel de campo, cuando el cuerpo de la solicitud no es válido.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "field": {
+                  "type": "string",
+                  "example": "code"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "must be unique in the workspace"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ErrorLegacy": {
+        "type": "object",
+        "description": "Cuerpo de error devuelto por los endpoints v1 heredados.",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "description": "Código de error numérico.",
+            "example": 1001
+          },
+          "message": {
+            "type": "string",
+            "description": "Mensaje legible para humanos.",
+            "example": "Store not found"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic",
+        "description": "Autenticación HTTP Basic. Envía `Authorization: Basic base64(username:password)` usando un usuario de integración creado en la administración de Shelfline."
+      }
+    },
+    "responses": {
+      "BadRequestV3": {
+        "description": "La solicitud está mal formada o un campo no es válido.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorV3"
+            }
+          }
+        }
+      },
+      "UnauthorizedV3": {
+        "description": "Credenciales ausentes o inválidas.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorV3"
+            }
+          }
+        }
+      },
+      "NotFoundV3": {
+        "description": "El recurso no existe en este workspace.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorV3"
+            }
+          }
+        }
+      },
+      "TooManyRequests": {
+        "description": "Demasiadas solicitudes. Reintenta después del número de segundos indicado en `Retry-After`.",
+        "headers": {
+          "Retry-After": {
+            "schema": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "BadRequestLegacy": {
+        "description": "La solicitud está mal formada o un campo no es válido.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorLegacy"
+            }
+          }
+        }
+      },
+      "UnauthorizedLegacy": {
+        "description": "Credenciales ausentes o inválidas.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorLegacy"
+            }
+          }
+        }
+      },
+      "NotFoundLegacy": {
+        "description": "El recurso no existe en este workspace.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorLegacy"
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "WorkspaceId": {
+        "name": "workspaceId",
+        "in": "path",
+        "required": true,
+        "description": "ID del workspace. Cada cuenta de cliente tiene uno o más workspaces.",
+        "schema": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "example": 7
+      },
+      "VisitIds": {
+        "name": "visitIds",
+        "in": "query",
+        "required": true,
+        "description": "IDs de las visitas que se van a eliminar, separados por comas.",
+        "style": "form",
+        "explode": false,
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "example": [
+          120554,
+          120555
+        ]
+      },
+      "BrandName": {
+        "name": "name",
+        "in": "query",
+        "description": "Filtra las marcas cuyo nombre contenga este texto.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "ClientName": {
+        "name": "X-Client-Name",
+        "in": "header",
+        "required": true,
+        "description": "Nombre de tu integración, usado en los registros de auditoría y en la limitación de tasa (p. ej. `erp-sync`).",
+        "schema": {
+          "type": "string"
+        },
+        "example": "erp-sync"
+      },
+      "ApiVersion": {
+        "name": "Api-Version",
+        "in": "header",
+        "description": "Versión de la API para los endpoints v3, como fecha de lanzamiento (`YYYY-MM-DD`). Ignorado por v1.",
+        "schema": {
+          "type": "string",
+          "default": "2025-01-15"
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Tiendas",
+      "description": "Tiendas, cadenas y centros comerciales donde trabaja el equipo de campo."
+    },
+    {
+      "name": "Productos",
+      "description": "Catálogo de productos y marcas auditados durante las visitas."
+    },
+    {
+      "name": "Equipo de campo",
+      "description": "Representantes de campo y sus equipos."
+    },
+    {
+      "name": "Rutas y visitas",
+      "description": "Rutas, visitas programadas y check-ins geolocalizados."
+    },
+    {
+      "name": "Encuestas",
+      "description": "Formularios completados durante las visitas y las respuestas recopiladas."
+    }
+  ]
+}

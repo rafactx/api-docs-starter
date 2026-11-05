@@ -1,0 +1,2286 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Shelfline Field API",
+    "version": "3.2.0",
+    "description": "The Shelfline Field API lets you sync stores, products and field teams with your own systems, plan visits and read the surveys collected in stores.\n\nShelfline is a fictional company: this API exists to demonstrate an OpenAPI clean-up pipeline and a multilingual docs portal.",
+    "contact": {
+      "name": "Shelfline Developer Support",
+      "email": "developers@shelfline.example",
+      "url": "https://developers.shelfline.example"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://{workspace}.shelfline.example/api",
+      "description": "Production (replace `demo` with your workspace subdomain)",
+      "variables": {
+        "workspace": {
+          "default": "demo",
+          "description": "Your Shelfline subdomain."
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/v1/{workspaceId}/stores": {
+      "get": {
+        "tags": [
+          "Stores"
+        ],
+        "description": "Returns the stores in a workspace, one page at a time.",
+        "operationId": "list",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "Workspace ID. Every customer account has one or more workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page to return, starting at 1.",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "Items per page (max 200).",
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "maximum": 200
+            }
+          },
+          {
+            "name": "enabled",
+            "in": "query",
+            "description": "Filter by enabled status.",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Stores returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageStoreV1"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestLegacy"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedLegacy"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundLegacy"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "List stores (v1)"
+      },
+      "post": {
+        "tags": [
+          "Stores"
+        ],
+        "description": "Creates a store. `code` must be unique in the workspace.",
+        "operationId": "save",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "Workspace ID. Every customer account has one or more workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "Store to create or replace.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StoreV1"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Store created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoreV1"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestLegacy"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedLegacy"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundLegacy"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Create store (v1)"
+      }
+    },
+    "/v1/{workspaceId}/stores/{storeId}": {
+      "get": {
+        "tags": [
+          "Stores"
+        ],
+        "description": "Returns one store by ID.",
+        "operationId": "findById",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "Workspace ID. Every customer account has one or more workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "name": "storeId",
+            "in": "path",
+            "description": "Store ID.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "required": true
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Store returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoreV1"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestLegacy"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedLegacy"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundLegacy"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Get store (v1)"
+      },
+      "put": {
+        "tags": [
+          "Stores"
+        ],
+        "description": "Replaces a store. Fields you omit are cleared.",
+        "operationId": "edit",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "Workspace ID. Every customer account has one or more workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "name": "storeId",
+            "in": "path",
+            "description": "Store ID.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "required": true
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "Store to create or replace.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StoreV1"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Store updated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoreV1"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestLegacy"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedLegacy"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundLegacy"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Replace store (v1)"
+      },
+      "delete": {
+        "tags": [
+          "Stores"
+        ],
+        "description": "Deletes a store and cancels its future visits.",
+        "operationId": "delete",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "Workspace ID. Every customer account has one or more workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "name": "storeId",
+            "in": "path",
+            "description": "Store ID.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "required": true
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Store deleted."
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestLegacy"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedLegacy"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundLegacy"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Delete store (v1)"
+      }
+    },
+    "/v1/{workspaceId}/malls/{mallId}": {
+      "get": {
+        "tags": [
+          "Stores"
+        ],
+        "description": "Returns one shopping mall by ID.",
+        "operationId": "findById_1",
+        "parameters": [
+          {
+            "name": "mallId",
+            "in": "path",
+            "description": "Mall ID.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "required": true
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          },
+          {
+            "$ref": "#/components/parameters/WorkspaceId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Mall returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MallV1"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestLegacy"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedLegacy"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundLegacy"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Get mall"
+      }
+    },
+    "/v1/{workspaceId}/products": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "description": "Returns the product catalogue, one page at a time.",
+        "operationId": "findPaginated",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "Workspace ID. Every customer account has one or more workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page to return, starting at 1.",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "Items per page (max 200).",
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "maximum": 200
+            }
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Products returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageProductV1"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestLegacy"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedLegacy"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundLegacy"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "List products"
+      }
+    },
+    "/v1/{workspaceId}/products/{productId}": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "description": "Returns one product by ID.",
+        "operationId": "findById_2",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "Workspace ID. Every customer account has one or more workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "name": "productId",
+            "in": "path",
+            "description": "Product ID.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "required": true
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductV1"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestLegacy"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedLegacy"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundLegacy"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Get product"
+      }
+    },
+    "/v1/{workspaceId}/surveys/{surveyId}/fields": {
+      "get": {
+        "tags": [
+          "Surveys"
+        ],
+        "description": "Returns the fields (questions) of a survey, in display order.",
+        "operationId": "formFields",
+        "parameters": [
+          {
+            "name": "surveyId",
+            "in": "path",
+            "description": "Survey ID.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "required": true
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          },
+          {
+            "$ref": "#/components/parameters/WorkspaceId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Survey fields returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SurveyFieldV1"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestLegacy"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedLegacy"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundLegacy"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "List survey fields"
+      }
+    },
+    "/v3/workspaces/{workspaceId}/stores/{storeId}": {
+      "get": {
+        "tags": [
+          "Stores"
+        ],
+        "description": "Returns one store by ID.",
+        "operationId": "getById",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "Workspace ID. Every customer account has one or more workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "name": "storeId",
+            "in": "path",
+            "description": "Store ID.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "required": true
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          },
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Store returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoreV3"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestV3"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedV3"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundV3"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Get store"
+      },
+      "patch": {
+        "tags": [
+          "Stores"
+        ],
+        "description": "Updates only the fields you send.",
+        "operationId": "patch",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "Workspace ID. Every customer account has one or more workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "name": "storeId",
+            "in": "path",
+            "description": "Store ID.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "required": true
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          },
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "Fields to change.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StorePatchV3"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Store updated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoreV3"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestV3"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedV3"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundV3"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Update store"
+      }
+    },
+    "/v3/workspaces/{workspaceId}/chains": {
+      "get": {
+        "tags": [
+          "Stores"
+        ],
+        "description": "Returns every chain in the workspace.",
+        "operationId": "findAll",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "Workspace ID. Every customer account has one or more workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          },
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Chains returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ChainV3"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestV3"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedV3"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundV3"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "List chains"
+      }
+    },
+    "/v3/workspaces/{workspaceId}/brands": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "description": "Returns the brands in the workspace.",
+        "operationId": "findAll_1",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "Workspace ID. Every customer account has one or more workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          },
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          },
+          {
+            "$ref": "#/components/parameters/BrandName"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Brands returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BrandV3"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestV3"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedV3"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundV3"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "List brands"
+      }
+    },
+    "/v3/workspaces/{workspaceId}/reps": {
+      "get": {
+        "tags": [
+          "Field team"
+        ],
+        "description": "Returns the field team, one page at a time.",
+        "operationId": "findPaginated_1",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "Workspace ID. Every customer account has one or more workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page to return, starting at 1.",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "Items per page (max 200).",
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "maximum": 200
+            }
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          },
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Field reps returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageFieldRepV3"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestV3"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedV3"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundV3"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "List field reps"
+      }
+    },
+    "/v3/workspaces/{workspaceId}/reps/{repId}": {
+      "get": {
+        "tags": [
+          "Field team"
+        ],
+        "description": "Returns one field rep by ID.",
+        "operationId": "getById_1",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "Workspace ID. Every customer account has one or more workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "name": "repId",
+            "in": "path",
+            "description": "Field rep ID.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "required": true
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          },
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Field rep returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FieldRepV3"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestV3"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedV3"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundV3"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Get field rep"
+      }
+    },
+    "/v3/workspaces/{workspaceId}/reps/{repId}/scheduled-visits": {
+      "get": {
+        "tags": [
+          "Routes and visits"
+        ],
+        "description": "Returns the visits on a rep's route between two dates.",
+        "operationId": "findScheduledVisits",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "Workspace ID. Every customer account has one or more workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "name": "repId",
+            "in": "path",
+            "description": "Field rep ID.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "required": true
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "required": true,
+            "description": "First day (inclusive).",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": true,
+            "description": "Last day (inclusive).",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          },
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Visits returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ScheduledVisitV3"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestV3"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedV3"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundV3"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "List scheduled visits"
+      },
+      "post": {
+        "tags": [
+          "Routes and visits"
+        ],
+        "description": "Adds several visits to a rep's route in one call.",
+        "operationId": "saveAll",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "Workspace ID. Every customer account has one or more workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "name": "repId",
+            "in": "path",
+            "description": "Field rep ID.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "required": true
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          },
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "Visits to schedule.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ScheduledVisitInputV3"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Visits scheduled.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ScheduledVisitV3"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestV3"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedV3"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundV3"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Schedule visits"
+      },
+      "delete": {
+        "tags": [
+          "Routes and visits"
+        ],
+        "description": "Removes several visits from a rep's route. Visits already started are kept.",
+        "operationId": "deleteAll",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "Workspace ID. Every customer account has one or more workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "name": "repId",
+            "in": "path",
+            "description": "Field rep ID.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "required": true
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          },
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          },
+          {
+            "$ref": "#/components/parameters/VisitIds"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Visits removed."
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestV3"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedV3"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundV3"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "Unschedule visits"
+      }
+    },
+    "/v3/workspaces/{workspaceId}/visits/{visitId}/check-ins": {
+      "get": {
+        "tags": [
+          "Routes and visits"
+        ],
+        "description": "Returns the check-in and check-out of a visit.",
+        "operationId": "findCheckIns",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "Workspace ID. Every customer account has one or more workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "name": "visitId",
+            "in": "path",
+            "description": "Visit ID.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "required": true
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          },
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Check-ins returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CheckInV3"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestV3"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedV3"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundV3"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "List visit check-ins"
+      }
+    },
+    "/v3/workspaces/{workspaceId}/surveys": {
+      "get": {
+        "tags": [
+          "Surveys"
+        ],
+        "description": "Returns the surveys active today.",
+        "operationId": "formsActivated",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "Workspace ID. Every customer account has one or more workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          },
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Surveys returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SurveyV3"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestV3"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedV3"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundV3"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "List active surveys"
+      }
+    },
+    "/v3/workspaces/{workspaceId}/surveys/{surveyId}/responses": {
+      "get": {
+        "tags": [
+          "Surveys"
+        ],
+        "description": "Returns submitted responses for a survey, newest first.",
+        "operationId": "loadData",
+        "parameters": [
+          {
+            "name": "workspaceId",
+            "in": "path",
+            "required": true,
+            "description": "Workspace ID. Every customer account has one or more workspaces.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 7
+          },
+          {
+            "name": "surveyId",
+            "in": "path",
+            "description": "Survey ID.",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "required": true
+          },
+          {
+            "name": "since",
+            "in": "query",
+            "description": "Only responses submitted after this instant (ISO 8601).",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page to return, starting at 1.",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "Items per page (max 200).",
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "maximum": 200
+            }
+          },
+          {
+            "$ref": "#/components/parameters/ClientName"
+          },
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Responses returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageSurveyResponseV3"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestV3"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedV3"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundV3"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        },
+        "summary": "List survey responses"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Address": {
+        "type": "object",
+        "description": "A postal address with coordinates.",
+        "properties": {
+          "street": {
+            "type": "string",
+            "description": "Street name.",
+            "example": "Rua Augusta"
+          },
+          "number": {
+            "type": "string",
+            "description": "Street number.",
+            "example": "1500"
+          },
+          "district": {
+            "type": "string",
+            "description": "District or neighbourhood.",
+            "example": "Consolação"
+          },
+          "city": {
+            "type": "string",
+            "description": "City.",
+            "example": "São Paulo"
+          },
+          "postalCode": {
+            "type": "string",
+            "description": "Postal code.",
+            "example": "01304-001"
+          },
+          "latitude": {
+            "type": "number",
+            "description": "Latitude in decimal degrees.",
+            "format": "double",
+            "example": -23.5558
+          },
+          "longitude": {
+            "type": "number",
+            "description": "Longitude in decimal degrees.",
+            "format": "double",
+            "example": -46.6623
+          }
+        }
+      },
+      "ChainV3": {
+        "type": "object",
+        "description": "A retail chain (banner) that groups stores.",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Chain ID.",
+            "format": "int64",
+            "example": 12
+          },
+          "name": {
+            "type": "string",
+            "description": "Chain name.",
+            "example": "Mercado Bom Preço"
+          }
+        }
+      },
+      "StoreV1": {
+        "type": "object",
+        "description": "A point of sale visited by the field team (legacy representation).",
+        "required": [
+          "name",
+          "code"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Store ID.",
+            "format": "int64",
+            "readOnly": true,
+            "example": 4021
+          },
+          "name": {
+            "type": "string",
+            "description": "Store name.",
+            "example": "Bom Preço - Paulista"
+          },
+          "code": {
+            "type": "string",
+            "description": "Your own code for the store, unique per workspace.",
+            "example": "SP-0042"
+          },
+          "chainName": {
+            "type": "string",
+            "description": "Name of the chain the store belongs to.",
+            "example": "Mercado Bom Preço"
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Whether the store can receive visits.",
+            "example": true
+          },
+          "address": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Address"
+              }
+            ],
+            "description": "Store address."
+          }
+        }
+      },
+      "StoreV3": {
+        "type": "object",
+        "description": "A point of sale visited by the field team.",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Store ID.",
+            "format": "int64",
+            "example": 4021
+          },
+          "name": {
+            "type": "string",
+            "description": "Store name.",
+            "example": "Bom Preço - Paulista"
+          },
+          "code": {
+            "type": "string",
+            "description": "Your own code for the store, unique per workspace.",
+            "example": "SP-0042"
+          },
+          "chain": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ChainV3"
+              }
+            ],
+            "description": "Chain the store belongs to."
+          },
+          "format": {
+            "type": "string",
+            "description": "Store format.",
+            "enum": [
+              "HYPERMARKET",
+              "SUPERMARKET",
+              "CONVENIENCE",
+              "PHARMACY",
+              "WHOLESALE"
+            ],
+            "example": "SUPERMARKET"
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Whether the store can receive visits.",
+            "example": true
+          },
+          "address": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Address"
+              }
+            ],
+            "description": "Store address."
+          },
+          "_link": {
+            "type": "string",
+            "description": "Canonical URL of this resource (HATEOAS).",
+            "format": "uri",
+            "readOnly": true,
+            "example": "https://demo.shelfline.example/api/v3/workspaces/7/stores/4021"
+          }
+        }
+      },
+      "StorePatchV3": {
+        "type": "object",
+        "description": "Fields that can be changed with PATCH. Omitted fields are left untouched.",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Store name."
+          },
+          "code": {
+            "type": "string",
+            "description": "Your own code for the store, unique per workspace."
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Whether the store can receive visits."
+          }
+        }
+      },
+      "MallV1": {
+        "type": "object",
+        "description": "A shopping mall that hosts one or more stores.",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Mall ID.",
+            "format": "int64",
+            "example": 88
+          },
+          "name": {
+            "type": "string",
+            "description": "Mall name.",
+            "example": "Shopping Vila Verde"
+          },
+          "address": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Address"
+              }
+            ],
+            "description": "Mall address."
+          }
+        }
+      },
+      "BrandV3": {
+        "type": "object",
+        "description": "A product brand.",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Brand ID.",
+            "format": "int64",
+            "example": 301
+          },
+          "name": {
+            "type": "string",
+            "description": "Brand name.",
+            "example": "Café Aurora"
+          }
+        }
+      },
+      "ProductV1": {
+        "type": "object",
+        "description": "A product (SKU) audited in stores.",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Product ID.",
+            "format": "int64",
+            "example": 9910
+          },
+          "name": {
+            "type": "string",
+            "description": "Product name.",
+            "example": "Café Aurora Tradicional 500 g"
+          },
+          "sku": {
+            "type": "string",
+            "description": "Your SKU code.",
+            "example": "AUR-TRAD-500"
+          },
+          "barcode": {
+            "type": "string",
+            "description": "EAN-13 barcode.",
+            "example": "7891234567895"
+          },
+          "brand": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/BrandV3"
+              }
+            ],
+            "description": "Product brand."
+          },
+          "category": {
+            "type": "string",
+            "description": "Category name.",
+            "example": "Coffee"
+          }
+        }
+      },
+      "FieldRepV3": {
+        "type": "object",
+        "description": "A field representative who visits stores.",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Field rep ID.",
+            "format": "int64",
+            "example": 57
+          },
+          "name": {
+            "type": "string",
+            "description": "Full name.",
+            "example": "Ana Costa"
+          },
+          "email": {
+            "type": "string",
+            "description": "Work email, also used as login.",
+            "format": "email",
+            "example": "ana.costa@example.com"
+          },
+          "phone": {
+            "type": "string",
+            "description": "Mobile phone in E.164 format.",
+            "example": "+5511987654321"
+          },
+          "team": {
+            "type": "string",
+            "description": "Team the rep belongs to.",
+            "example": "São Paulo - Capital"
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Whether the rep can log in to the mobile app.",
+            "example": true
+          }
+        }
+      },
+      "ScheduledVisitV3": {
+        "type": "object",
+        "description": "A visit planned on a rep's route.",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Visit ID.",
+            "format": "int64",
+            "example": 120554
+          },
+          "storeId": {
+            "type": "integer",
+            "description": "Store to be visited.",
+            "format": "int64",
+            "example": 4021
+          },
+          "date": {
+            "type": "string",
+            "description": "Visit date.",
+            "format": "date",
+            "example": "2025-03-14"
+          },
+          "plannedStart": {
+            "type": "string",
+            "description": "Planned start time (HH:mm, store local time).",
+            "example": "09:30"
+          },
+          "status": {
+            "type": "string",
+            "description": "Visit status.",
+            "enum": [
+              "SCHEDULED",
+              "IN_PROGRESS",
+              "DONE",
+              "MISSED"
+            ],
+            "example": "SCHEDULED"
+          }
+        }
+      },
+      "ScheduledVisitInputV3": {
+        "type": "object",
+        "description": "A visit to add to a rep's route.",
+        "required": [
+          "storeId",
+          "date"
+        ],
+        "properties": {
+          "storeId": {
+            "type": "integer",
+            "description": "Store to be visited.",
+            "format": "int64",
+            "example": 4021
+          },
+          "date": {
+            "type": "string",
+            "description": "Visit date.",
+            "format": "date",
+            "example": "2025-03-14"
+          },
+          "plannedStart": {
+            "type": "string",
+            "description": "Planned start time (HH:mm, store local time).",
+            "example": "09:30"
+          }
+        }
+      },
+      "CheckInV3": {
+        "type": "object",
+        "description": "A geolocated check-in or check-out recorded by the mobile app.",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Check-in ID.",
+            "format": "int64",
+            "example": 88123
+          },
+          "type": {
+            "type": "string",
+            "description": "Whether the rep arrived or left.",
+            "enum": [
+              "CHECK_IN",
+              "CHECK_OUT"
+            ],
+            "example": "CHECK_IN"
+          },
+          "timestamp": {
+            "type": "string",
+            "description": "When it happened (ISO 8601, UTC).",
+            "format": "date-time",
+            "example": "2025-03-14T12:31:05Z"
+          },
+          "latitude": {
+            "type": "number",
+            "description": "Latitude in decimal degrees.",
+            "format": "double",
+            "example": -23.5558
+          },
+          "longitude": {
+            "type": "number",
+            "description": "Longitude in decimal degrees.",
+            "format": "double",
+            "example": -46.6623
+          },
+          "distanceMeters": {
+            "type": "integer",
+            "description": "Distance from the store when the check-in was recorded.",
+            "example": 18
+          }
+        }
+      },
+      "SurveyV3": {
+        "type": "object",
+        "description": "A form the field team fills in during visits (shelf audit, price check, etc.).",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Survey ID.",
+            "format": "int64",
+            "example": 640
+          },
+          "name": {
+            "type": "string",
+            "description": "Survey name.",
+            "example": "Shelf share - coffee"
+          },
+          "startDate": {
+            "type": "string",
+            "description": "First day the survey is active.",
+            "format": "date",
+            "example": "2025-03-01"
+          },
+          "endDate": {
+            "type": "string",
+            "description": "Last day the survey is active.",
+            "format": "date",
+            "example": "2025-03-31"
+          }
+        }
+      },
+      "SurveyFieldV1": {
+        "type": "object",
+        "description": "A question in a survey.",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Field ID.",
+            "format": "int64",
+            "example": 7712
+          },
+          "label": {
+            "type": "string",
+            "description": "Question shown to the rep.",
+            "example": "Shelf price (R$)"
+          },
+          "type": {
+            "type": "string",
+            "description": "Answer type.",
+            "enum": [
+              "TEXT",
+              "NUMBER",
+              "MONEY",
+              "SINGLE_CHOICE",
+              "MULTIPLE_CHOICE",
+              "PHOTO"
+            ],
+            "example": "MONEY"
+          },
+          "required": {
+            "type": "boolean",
+            "description": "Whether an answer is mandatory.",
+            "example": true
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Allowed answers for choice fields."
+          }
+        }
+      },
+      "SurveyAnswerV3": {
+        "type": "object",
+        "description": "The answer to one survey field.",
+        "properties": {
+          "fieldId": {
+            "type": "integer",
+            "description": "Survey field ID.",
+            "format": "int64",
+            "example": 7712
+          },
+          "value": {
+            "type": "string",
+            "description": "Answer, serialised as text. Photos are returned as URLs.",
+            "example": "21.90"
+          }
+        }
+      },
+      "SurveyResponseV3": {
+        "type": "object",
+        "description": "A completed survey, as submitted from a store.",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Response ID.",
+            "format": "int64",
+            "example": 550123
+          },
+          "storeId": {
+            "type": "integer",
+            "description": "Store to be visited.",
+            "format": "int64",
+            "example": 4021
+          },
+          "repId": {
+            "type": "integer",
+            "description": "Rep who submitted the response.",
+            "format": "int64",
+            "example": 57
+          },
+          "submittedAt": {
+            "type": "string",
+            "description": "Submission time (ISO 8601, UTC).",
+            "format": "date-time",
+            "example": "2025-03-14T12:58:40Z"
+          },
+          "answers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SurveyAnswerV3"
+            },
+            "description": "Answers, one per field."
+          }
+        }
+      },
+      "PageStoreV1": {
+        "type": "object",
+        "description": "One page of results.",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StoreV1"
+            },
+            "description": "Items on this page."
+          },
+          "page": {
+            "type": "integer",
+            "description": "Current page, starting at 1.",
+            "example": 1
+          },
+          "size": {
+            "type": "integer",
+            "description": "Page size.",
+            "example": 50
+          },
+          "totalItems": {
+            "type": "integer",
+            "description": "Total number of items across all pages.",
+            "format": "int64",
+            "example": 1280
+          }
+        }
+      },
+      "PageProductV1": {
+        "type": "object",
+        "description": "One page of results.",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductV1"
+            },
+            "description": "Items on this page."
+          },
+          "page": {
+            "type": "integer",
+            "description": "Current page, starting at 1.",
+            "example": 1
+          },
+          "size": {
+            "type": "integer",
+            "description": "Page size.",
+            "example": 50
+          },
+          "totalItems": {
+            "type": "integer",
+            "description": "Total number of items across all pages.",
+            "format": "int64",
+            "example": 1280
+          }
+        }
+      },
+      "PageFieldRepV3": {
+        "type": "object",
+        "description": "One page of results.",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FieldRepV3"
+            },
+            "description": "Items on this page."
+          },
+          "page": {
+            "type": "integer",
+            "description": "Current page, starting at 1.",
+            "example": 1
+          },
+          "size": {
+            "type": "integer",
+            "description": "Page size.",
+            "example": 50
+          },
+          "totalItems": {
+            "type": "integer",
+            "description": "Total number of items across all pages.",
+            "format": "int64",
+            "example": 1280
+          }
+        }
+      },
+      "PageSurveyResponseV3": {
+        "type": "object",
+        "description": "One page of results.",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SurveyResponseV3"
+            },
+            "description": "Items on this page."
+          },
+          "page": {
+            "type": "integer",
+            "description": "Current page, starting at 1.",
+            "example": 1
+          },
+          "size": {
+            "type": "integer",
+            "description": "Page size.",
+            "example": 50
+          },
+          "totalItems": {
+            "type": "integer",
+            "description": "Total number of items across all pages.",
+            "format": "int64",
+            "example": 1280
+          }
+        }
+      },
+      "ErrorV3": {
+        "type": "object",
+        "description": "Error body returned by v3 endpoints.",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "description": "HTTP status code.",
+            "example": 400
+          },
+          "code": {
+            "type": "string",
+            "description": "Stable, machine-readable error code.",
+            "example": "INVALID_FIELD"
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable message.",
+            "example": "Request validation failed."
+          },
+          "details": {
+            "type": "array",
+            "description": "Field-level problems, when the request body is invalid.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "field": {
+                  "type": "string",
+                  "example": "code"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "must be unique in the workspace"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ErrorLegacy": {
+        "type": "object",
+        "description": "Error body returned by legacy v1 endpoints.",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "description": "Numeric error code.",
+            "example": 1001
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable message.",
+            "example": "Store not found"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic",
+        "description": "HTTP Basic authentication. Send `Authorization: Basic base64(username:password)` using an integration user created in the Shelfline admin."
+      }
+    },
+    "responses": {
+      "BadRequestV3": {
+        "description": "The request is malformed or a field is invalid.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorV3"
+            }
+          }
+        }
+      },
+      "UnauthorizedV3": {
+        "description": "Missing or invalid credentials.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorV3"
+            }
+          }
+        }
+      },
+      "NotFoundV3": {
+        "description": "The resource does not exist in this workspace.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorV3"
+            }
+          }
+        }
+      },
+      "TooManyRequests": {
+        "description": "Too many requests. Retry after the number of seconds in `Retry-After`.",
+        "headers": {
+          "Retry-After": {
+            "schema": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "BadRequestLegacy": {
+        "description": "The request is malformed or a field is invalid.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorLegacy"
+            }
+          }
+        }
+      },
+      "UnauthorizedLegacy": {
+        "description": "Missing or invalid credentials.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorLegacy"
+            }
+          }
+        }
+      },
+      "NotFoundLegacy": {
+        "description": "The resource does not exist in this workspace.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorLegacy"
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "WorkspaceId": {
+        "name": "workspaceId",
+        "in": "path",
+        "required": true,
+        "description": "Workspace ID. Every customer account has one or more workspaces.",
+        "schema": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "example": 7
+      },
+      "VisitIds": {
+        "name": "visitIds",
+        "in": "query",
+        "required": true,
+        "description": "IDs of the visits to remove, comma-separated.",
+        "style": "form",
+        "explode": false,
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "example": [
+          120554,
+          120555
+        ]
+      },
+      "BrandName": {
+        "name": "name",
+        "in": "query",
+        "description": "Filter brands whose name contains this text.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "ClientName": {
+        "name": "X-Client-Name",
+        "in": "header",
+        "required": true,
+        "description": "Name of your integration, used in audit logs and rate limiting (e.g. `erp-sync`).",
+        "schema": {
+          "type": "string"
+        },
+        "example": "erp-sync"
+      },
+      "ApiVersion": {
+        "name": "Api-Version",
+        "in": "header",
+        "description": "API version for v3 endpoints, as a release date (`YYYY-MM-DD`). Ignored by v1.",
+        "schema": {
+          "type": "string",
+          "default": "2025-01-15"
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Stores",
+      "description": "Stores, chains and malls where the field team works."
+    },
+    {
+      "name": "Products",
+      "description": "Product catalogue and brands audited during visits."
+    },
+    {
+      "name": "Field team",
+      "description": "Field representatives and their teams."
+    },
+    {
+      "name": "Routes and visits",
+      "description": "Routes, scheduled visits and geolocated check-ins."
+    },
+    {
+      "name": "Surveys",
+      "description": "Forms filled in during visits and the answers collected."
+    }
+  ]
+}
