@@ -67,7 +67,7 @@ docs/
 1. Replace `docs/public/openapi.*.json` with your specs (one per language, or point every locale at the same file in `SPEC_BY_LANG` inside `ScalarApi.vue`).
 2. Rewrite the guide pages in `docs/<lang>/` and adjust the sidebars in `docs/.vitepress/config.ts`.
 3. Change the brand block in `docs/.vitepress/theme/theme.css` and the logos in `docs/public/`.
-4. Take a new `docs/public/preview.png` (1440×900 works well).
+4. Take a new `docs/public/preview.png` (the hero shows it inside a MacBook frame: screenshot at 1440×932 and composite it into the screen area).
 5. Deploy: any static host works. The live demo runs on Cloudflare Workers Static Assets: `pnpm build && npx wrangler deploy` (config in `wrangler.jsonc`).
 
 ## Screenshots

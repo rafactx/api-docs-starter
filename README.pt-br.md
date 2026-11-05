@@ -51,7 +51,7 @@ spec crua ──► hydrate ► fix ► validate ──► docs/public/openapi.<
 1. Substitua `docs/public/openapi.*.json` pelas suas specs (uma por idioma, ou aponte todos os idiomas para o mesmo arquivo em `SPEC_BY_LANG`, dentro de `ScalarApi.vue`).
 2. Reescreva os guias em `docs/<lang>/` e ajuste as sidebars em `docs/.vitepress/config.ts`.
 3. Troque o bloco de marca em `docs/.vitepress/theme/theme.css` e os logos em `docs/public/`.
-4. Gere um novo `docs/public/preview.png` (1440×900 funciona bem).
+4. Gere um novo `docs/public/preview.png` (a página inicial mostra a imagem dentro de um MacBook: print em 1440×932 composto na área da tela).
 5. Publique em qualquer host estático. A demo roda no Cloudflare Workers Static Assets: `pnpm build && npx wrangler deploy` (configuração em `wrangler.jsonc`).
 
 ## Licença
