@@ -1,0 +1,143 @@
+/* docs/.vitepress/theme/theme.css */
+/* Palette and Apple-like customizations. Change the brand block to re-skin the portal. */
+
+:root {
+  /* === Brand === */
+  --vp-c-brand: #4F46E5;
+  --vp-c-brand-1: #4F46E5;
+  --vp-c-brand-2: #6366F1;
+  --vp-c-brand-3: #4338CA;
+  --vp-c-brand-dark: #4338CA;
+  --vp-c-brand-darker: #3730A3;
+  --vp-c-brand-soft: rgba(79, 70, 229, 0.08);
+
+  /* === Hero === */
+  --vp-hero-primary-color: #4F46E5;
+  --vp-hero-primary-rgb: 79, 70, 229;
+  --vp-hero-secondary-color: #4338CA;
+  --vp-hero-success-color: #34c759;
+  --vp-hero-error-color: #ff3b30;
+  --vp-hero-warning-color: #ff9500;
+
+  /* === Backgrounds === */
+  --vp-c-bg: #ffffff;
+  --vp-c-bg-alt: #f6f6f6;
+  --vp-c-bg-elv: #ffffff;
+  --vp-c-bg-soft: #f6f6f6;
+  --vp-c-bg-mute: #f1f1f1;
+
+  /* === Text === */
+  --vp-c-text-1: #213547;
+  --vp-c-text-2: #476582;
+  --vp-c-text-3: #8f9198;
+  --vp-c-text-code: #476582;
+
+  /* === Code === */
+  --vp-c-code: #f1f1f1;
+  --vp-c-code-bg: #f1f1f1;
+
+  /* === Borders === */
+  --vp-c-border: #e2e2e2;
+  --vp-c-divider: #e2e2e2;
+  --vp-c-gutter: #f6f6f6;
+
+  /* === Text selection === */
+  --vp-selection-color: rgba(79, 70, 229, 0.3);
+
+  /* === Apple-like shadows === */
+  --vp-shadow-1: 0 1.5px 5px 0 rgba(28,28,30,0.07), 0 0.5px 2px -1px rgba(28,28,30,0.10);
+  --vp-shadow-2: 0 6px 18px -2px rgba(28,28,30,0.10), 0 2px 8px -2px rgba(28,28,30,0.09);
+  --vp-shadow-3: 0 14px 28px -5px rgba(28,28,30,0.12), 0 4px 12px -4px rgba(28,28,30,0.11);
+  --vp-shadow-4: 0 24px 38px -8px rgba(28,28,30,0.14), 0 8px 16px -6px rgba(28,28,30,0.13);
+
+  /* === Border Radius === */
+  --vp-radius-xs: 0.25rem;
+  --vp-radius-sm: 0.375rem;
+  --vp-radius-md: 0.5rem;
+  --vp-radius-lg: 0.75rem;
+  --vp-radius-xl: 1rem;
+  --vp-radius-2xl: 1.5rem;
+
+  /* === Spacing === */
+  --vp-space-xs: 0.25rem;
+  --vp-space-sm: 0.5rem;
+  --vp-space-md: 1rem;
+  --vp-space-lg: 1.5rem;
+  --vp-space-xl: 2rem;
+  --vp-space-2xl: 3rem;
+  --vp-space-3xl: 4rem;
+  --vp-space-4xl: 5rem;
+
+  /* === Typography === */
+  --vp-font-size-xs: 0.75rem;
+  --vp-font-size-sm: 0.875rem;
+  --vp-font-size-base: 1rem;
+  --vp-font-size-lg: 1.125rem;
+  --vp-font-size-xl: 1.25rem;
+  --vp-font-size-2xl: 1.5rem;
+  --vp-font-size-3xl: 1.875rem;
+  --vp-font-size-4xl: 2.25rem;
+  --vp-font-size-5xl: 3rem;
+  --vp-font-size-6xl: 3.75rem;
+
+  /* === Transitions === */
+  --vp-transition-timing-fast: 150ms;
+  --vp-transition-timing-base: 250ms;
+  --vp-transition-timing-slow: 350ms;
+  --vp-transition-timing-slower: 500ms;
+
+  --vp-ease-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --vp-ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --vp-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --vp-ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  /* === Glassmorphism === */
+  --vp-backdrop-blur: blur(20px);
+  --vp-backdrop-blur-sm: blur(10px);
+  --vp-backdrop-blur-lg: blur(30px);
+
+  /* === Extra Apple-like micro-details === */
+  --vp-outline-focus: 2px solid var(--vp-c-brand);
+  --vp-outline-radius: 6px;
+}
+
+.dark {
+  /* === Background and text === */
+  --vp-c-bg: #1d1d1f;
+  --vp-c-bg-alt: #222226;
+  --vp-c-bg-elv: #232326;
+  --vp-c-bg-soft: #232326;
+  --vp-c-bg-mute: #19191a;
+
+  --vp-c-text-1: #f6f6fa;
+  --vp-c-text-2: #a1a1a6;
+  --vp-c-text-3: #6e6e73;
+  --vp-c-text-code: #c7d2fe;
+
+  --vp-c-border: #2c2c31;
+  --vp-c-divider: #262629;
+  --vp-c-gutter: #232326;
+  --vp-c-code: #222226;
+  --vp-c-code-bg: #232326;
+
+  /* === Brand === */
+  --vp-c-brand: #818CF8;
+  --vp-c-brand-1: #818CF8;
+  --vp-c-brand-2: #6366F1;
+  --vp-c-brand-3: #4F46E5;
+  --vp-c-brand-soft: rgba(79, 70, 229, 0.16);
+
+  /* === Hero === */
+  --vp-hero-primary-color: #4F46E5;
+  --vp-hero-primary-rgb: 79, 70, 229;
+  --vp-hero-secondary-color: #4338CA;
+
+  /* === Text selection === */
+  --vp-selection-color: rgba(79, 70, 229, 0.38);
+
+  /* === Dark shadows === */
+  --vp-shadow-1: 0 1.5px 6px 0 rgba(16,16,20,0.19), 0 1.5px 3px -1px rgba(12,12,14,0.10);
+  --vp-shadow-2: 0 6px 18px -2px rgba(20,20,24,0.18), 0 2px 8px -2px rgba(20,20,24,0.13);
+  --vp-shadow-3: 0 14px 28px -5px rgba(20,20,24,0.20), 0 4px 12px -4px rgba(20,20,24,0.17);
+  --vp-shadow-4: 0 24px 38px -8px rgba(20,20,24,0.22), 0 8px 16px -6px rgba(20,20,24,0.17);
+}

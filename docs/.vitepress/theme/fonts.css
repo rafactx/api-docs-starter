@@ -1,0 +1,35 @@
+/* Hepta Slab - Headings */
+@font-face {
+  font-family: 'Hepta Slab';
+  src: url('/fonts/HeptaSlab-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Poppins - Base text */
+@font-face {
+  font-family: 'Poppins';
+  src: url('/fonts/Poppins-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Poppins - Semibold (buttons and light emphasis) */
+@font-face {
+  font-family: 'Poppins';
+  src: url('/fonts/Poppins-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Zilla Slab - Highlights */
+@font-face {
+  font-family: 'Zilla Slab';
+  src: url('/fonts/ZillaSlab-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}

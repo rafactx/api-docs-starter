@@ -1,0 +1,37 @@
+# Node
+node_modules/
+pnpm-debug.log*
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# VitePress build & cache
+docs/.vitepress/dist/
+docs/.vitepress/cache/
+dist/
+.vitepress/cache/
+.cache/
+temp/
+tmp/
+cache/
+
+# Sistema
+.DS_Store
+**/.DS_Store
+Thumbs.db
+
+# IDEs e editores
+.vscode/
+.idea/
+
+# Vercel
+.vercel/
+
+# Variáveis de ambiente
+.env*
+
+.claude.md
+CLAUDE.md

@@ -1,0 +1,12 @@
+<svg width="200" height="40" viewBox="0 0 200 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- API Docs Logo - Light Theme -->
+  <rect x="0" y="0" width="40" height="40" rx="8" fill="#4f46e5"/>
+  <path d="M12 28V12L16 16V28H12Z" fill="white"/>
+  <path d="M20 28V16L24 12V28H20Z" fill="white"/>
+  <path d="M28 28V20L32 16V28H28Z" fill="white"/>
+
+  <!-- Text -->
+  <text x="50" y="26" font-family="Inter, system-ui, sans-serif" font-size="18" font-weight="600" fill="#1f2937">
+    API Docs
+  </text>
+</svg>

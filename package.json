@@ -1,0 +1,69 @@
+{
+  "name": "api-docs-starter",
+  "version": "1.0.0",
+  "description": "A modern API documentation starter template built with VitePress, Vue 3, TypeScript, and TailwindCSS. Features interactive API reference with Scalar, multi-language support, and responsive design.",
+  "author": {
+    "name": "Rafael Teixeira",
+    "email": "teixeirac.rafael@gmail.com",
+    "url": "https://github.com/rafactx"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rafactx/api-docs-starter.git"
+  },
+  "license": "MIT",
+  "keywords": [
+    "api",
+    "documentation",
+    "vitepress",
+    "vue",
+    "typescript",
+    "tailwindcss",
+    "scalar",
+    "starter",
+    "template",
+    "multi-language",
+    "openapi",
+    "developer-experience"
+  ],
+  "type": "module",
+  "packageManager": "pnpm@8.15.5",
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.15.5"
+  },
+  "scripts": {
+    "dev": "vitepress dev docs",
+    "build": "vitepress build docs",
+    "preview": "vitepress preview docs",
+    "clean": "rimraf ./docs/.vitepress/dist",
+    "format": "prettier --write .",
+    "lint": "eslint . --ext .js,.ts,.vue --fix"
+  },
+  "dependencies": {
+    "@vercel/analytics": "^1.5.0",
+    "@vercel/speed-insights": "^1.2.0",
+    "@vueuse/core": "^13.4.0",
+    "@vueuse/motion": "^3.0.3",
+    "vue": "^3.5.17"
+  },
+  "devDependencies": {
+    "@scalar/api-reference": "^1.31.18",
+    "@types/accept-language-parser": "^1.5.8",
+    "@types/node": "^24.0.3",
+    "@typescript-eslint/eslint-plugin": "^8.34.1",
+    "@typescript-eslint/parser": "^8.34.1",
+    "@vercel/edge": "^1.2.2",
+    "accept-language-parser": "^1.5.0",
+    "eslint": "^9.6.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-vue": "^9.27.0",
+    "prettier": "^3.3.2",
+    "rimraf": "^5.0.7",
+    "terser": "^5.44.0",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5",
+    "vitepress": "^1.6.3",
+    "vitepress-plugin-group-icons": "1.6.0"
+  }
+}

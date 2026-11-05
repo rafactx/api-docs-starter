@@ -1,0 +1,125 @@
+/* Refined sidebar container */
+.VPSidebar {
+  padding: 1.25rem 1.25rem 1.5rem;
+  background-color: var(--vp-c-bg-alt);
+  border-right: 1px solid var(--vp-c-divider);
+  min-width: 240px;
+  max-width: 320px;
+  box-sizing: border-box;
+  /* Smooth transition for theme switching */
+  transition: background-color 0.25s, border-color 0.22s;
+}
+
+/* Group titles (non-clickable, Apple-like style) */
+.VPSidebar .group h2 {
+  font-family: 'Hepta Slab', serif;
+  font-size: 0.97rem;
+  font-weight: 600;
+  color: var(--vp-c-text-1);
+  margin: 0 0 0.7rem 0.22rem;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: default;
+  pointer-events: none;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  opacity: 0.56;
+  user-select: none;
+  transition: color 0.18s, opacity 0.18s;
+}
+
+/* Spacing between groups */
+.VPSidebar .group {
+  margin-bottom: 2.1rem;
+}
+
+/* Subtle separator between groups */
+.VPSidebar .group + .group {
+  border-top: 1px solid var(--vp-c-divider);
+  padding-top: 1.1rem;
+}
+
+/* Refined menu items (only <a> links) */
+.VPSidebar .item:is(a) {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 400;
+  color: var(--vp-c-text-2);
+  padding: 0.32rem 0.75rem 0.32rem 0.9rem;
+  margin-left: 0.06rem;
+  border-radius: 0.55rem;
+  display: flex;
+  align-items: center;
+  gap: 0.56rem;
+  transition:
+    background-color 0.18s cubic-bezier(.42,0,.58,1),
+    color 0.18s cubic-bezier(.42,0,.58,1),
+    font-weight 0.16s;
+  position: relative;
+  outline: none;
+}
+
+/* More subtle and elegant hover, but noticeable in light/dark */
+.VPSidebar .item:is(a):hover:not(.active),
+.VPSidebar .item:is(a):focus-visible:not(.active) {
+  background-color: rgba(var(--vp-hero-primary-rgb), 0.08);
+  color: var(--vp-c-text-1);
+  text-shadow: 0 1px 3px rgba(120,140,180,0.04);
+}
+
+/* More refined active item */
+.VPSidebar .item:is(a).active {
+  color: var(--vp-c-brand);
+  background-color: rgba(var(--vp-hero-primary-rgb), 0.15);
+  font-weight: 600;
+  box-shadow: 0 1.5px 8px 0 rgba(32,94,255,0.03);
+}
+
+/* Side dot only on links */
+.VPSidebar .item:is(a)::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--vp-c-brand);
+  opacity: 0;
+  margin-right: 0.44rem;
+  transition: opacity 0.25s cubic-bezier(.42,0,.58,1), margin 0.17s;
+  box-shadow: 0 0.5px 2.5px 0 rgba(32,94,255,0.12);
+  flex-shrink: 0;
+}
+
+/* Activate dot on hover/active only on links */
+.VPSidebar .item:is(a):hover::before,
+.VPSidebar .item:is(a).active::before {
+  opacity: 1;
+  margin-right: 0.5rem;
+}
+
+/* Higher contrast in dark mode */
+:root.dark .VPSidebar {
+  background-color: var(--vp-c-bg-alt);
+  border-right-color: var(--vp-c-divider);
+}
+:root.dark .VPSidebar .group h2 {
+  color: var(--vp-c-text-2);
+  opacity: 0.64;
+}
+
+/* Responsiveness: slimmer sidebar on small screens */
+@media (max-width: 900px) {
+  .VPSidebar {
+    padding-left: 0.7rem;
+    padding-right: 0.7rem;
+    min-width: 0;
+    max-width: 100vw;
+  }
+}
+
+/* Extra accessibility: clear keyboard focus */
+.VPSidebar .item:is(a):focus-visible {
+  outline: 2px solid var(--vp-c-brand);
+  outline-offset: 1px;
+  z-index: 1;
+}
