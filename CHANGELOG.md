@@ -4,8 +4,9 @@ Notable changes to this project are recorded here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and versions follow
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-No version has been released yet. The first tag will be `v0.1.0`, cut from
-the state described under Unreleased.
+No version has been tagged yet. `package.json` already says `0.1.0`, the
+version the first tag (`v0.1.0`) will carry, cut from the state described
+under Unreleased.
 
 ## [Unreleased]
 
@@ -35,6 +36,16 @@ the state described under Unreleased.
 - Scalar's loading and error states use render functions, so they display
   with the runtime-only Vue build.
 
+### Fixed
+
+- Guide pages lost their padding, width limit and previous/next links
+  because the API reference layout overrides were global.
+- Local search was configured inside one locale, where VitePress ignores
+  it, so the site had no search. It now works in all four languages.
+- `/` always went to `/en` on Cloudflare (`_redirects`), so the
+  browser-language redirect never ran. The redirect now runs in the browser.
+- The API reference loading and error messages were English on every locale.
+
 ### Removed
 
 - Vercel Analytics and Speed Insights, which did nothing on Cloudflare.
@@ -42,6 +53,8 @@ the state described under Unreleased.
   the `lint`, `format` and `clean` scripts, which had no configuration behind
   them.
 - The unfilled `FUNDING.yml` and the generic Markdown issue templates.
+- The Resources > GitHub nav dropdown in pt and en; every locale shows the
+  GitHub icon instead.
 - CSS rules for classes nothing renders, unused design tokens and the unused
   Zilla Slab font.
 
