@@ -44,8 +44,8 @@ spec crua ──► hydrate ► fix ► validate ──► docs/public/openapi.<
 
 - **Guias** são Markdown em `docs/{en,pt,es,fr}/`. Cada idioma tem nav e sidebar próprios em `docs/.vitepress/config.ts`.
 - **Referência da API**: `docs/.vitepress/components/ScalarApi.vue` embute o Scalar e escolhe a spec pelo idioma da página (`pt` → `openapi.pt-BR.json`, `en` → `openapi.en.json`, ...). Use `spec-url` para sobrescrever.
-- **Tema**: o Scalar roda com `theme: 'none'` e suas variáveis CSS são mapeadas para as do VitePress, então a referência segue cores, fontes e modo escuro do site. A paleta fica em `docs/.vitepress/theme/theme.css`.
-- **Componentes**: `ApiCard` (tabelas chave/descrição dos guias), `HeroSection` + `SpotlightBackground` (página inicial).
+- **Tema**: o Scalar roda com `theme: 'none'` e suas variáveis CSS são mapeadas para as do VitePress, então a referência segue cores, fontes e modo escuro do site. A cor da marca e as fontes ficam em `docs/.vitepress/theme/style.css`, uma camada fina sobre o tema padrão do VitePress.
+- **Componentes**: `ApiCard` (tabelas chave/descrição dos guias), A página inicial de cada idioma é o hero padrão do VitePress, configurado em `docs/<lang>/index.md`, com o `HomeSpotlight` (um brilho que segue o ponteiro) por trás.
 - **Idioma**: `/` (`docs/index.md`) leva o navegador para `/pt/`, `/es/` ou `/fr/` conforme o idioma dele, e para `/en/` nos demais casos. Sem JavaScript, mostra a lista dos quatro idiomas.
 
 ## Estrutura do projeto
@@ -53,12 +53,13 @@ spec crua ──► hydrate ► fix ► validate ──► docs/public/openapi.<
 ```text
 docs/
 ├── .vitepress/
-│   ├── components/      ApiCard, HeroSection, ScalarApi, SpotlightBackground
-│   ├── theme/           theme.css (paleta), style.css, api-docs-responsive.css, sidebar.css, fonts.css
+│   ├── components/      ApiCard, HomeSpotlight, ScalarApi
+│   ├── theme/           style.css (marca, fontes, superfícies), fonts.css
 │   └── config.ts        idiomas, nav, sidebars
 ├── public/
 │   ├── openapi.{en,pt-BR,es,fr}.json   uma spec por idioma
-│   ├── preview.png                     imagem da página inicial (também usada acima)
+│   ├── preview.png                     screenshot usado acima
+│   ├── preview-{1080,1761}.webp        a mesma imagem nas páginas iniciais
 │   └── favicon.svg, logo-{light,dark}.svg
 ├── en/ pt/ es/ fr/      intro, authentication, rate-limits, examples, pagination, errors, api-reference
 └── index.md             redirecionamento de idioma
@@ -68,8 +69,8 @@ docs/
 
 1. Substitua `docs/public/openapi.*.json` pelas suas specs (uma por idioma, ou aponte todos os idiomas para o mesmo arquivo em `SPEC_BY_LANG`, dentro de `ScalarApi.vue`).
 2. Reescreva os guias em `docs/<lang>/` e ajuste as sidebars em `docs/.vitepress/config.ts`.
-3. Troque o bloco de marca em `docs/.vitepress/theme/theme.css` e os logos em `docs/public/`.
-4. Gere um novo `docs/public/preview.png` (a página inicial mostra a imagem dentro de um MacBook: print em 1440×932 composto na área da tela).
+3. Troque o bloco de marca em `docs/.vitepress/theme/style.css` e os logos em `docs/public/`.
+4. Troque o `docs/public/preview.png` e os dois `preview-*.webp` das páginas iniciais (1761×1075, um notebook com um print de 1440×932 composto na tela).
 5. Publique em qualquer host estático. A demo roda no Cloudflare Workers Static Assets: `pnpm run deploy` gera o site e roda `wrangler deploy` (configuração em `wrangler.jsonc`).
 
 ## Contribuindo

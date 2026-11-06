@@ -7,12 +7,12 @@ description: "Codes de statut et corps d’erreur renvoyés par l’API Shelflin
 
 <script setup>
 const statusTable = [
-  { key: '200 / 201 / 204', description: 'Succès. 201 quand une ressource a été créée, 204 quand il n’y a pas de corps.', color: 'green' },
-  { key: '400', description: '<code>Bad Request</code> : requête mal formée ou champ invalide.', color: 'red' },
-  { key: '401', description: '<code>Unauthorized</code> : identifiants manquants ou invalides.', color: 'red' },
-  { key: '404', description: '<code>Not Found</code> : la ressource n’existe pas dans ce workspace.', color: 'purple' },
-  { key: '429', description: '<code>Too Many Requests</code> : attendez <code>Retry-After</code> secondes.', color: 'yellow' },
-  { key: '5xx', description: 'Erreur serveur. Vous pouvez réessayer sans risque les requêtes idempotentes avec un backoff.', color: 'pink' }
+  { key: '200 / 201 / 204', description: 'Succès. 201 quand une ressource a été créée, 204 quand il n’y a pas de corps.' },
+  { key: '400', description: '<code>Bad Request</code> : requête mal formée ou champ invalide.' },
+  { key: '401', description: '<code>Unauthorized</code> : identifiants manquants ou invalides.' },
+  { key: '404', description: '<code>Not Found</code> : la ressource n’existe pas dans ce workspace.' },
+  { key: '429', description: '<code>Too Many Requests</code> : attendez <code>Retry-After</code> secondes.' },
+  { key: '5xx', description: 'Erreur serveur. Vous pouvez réessayer sans risque les requêtes idempotentes avec un backoff.' }
 ]
 </script>
 

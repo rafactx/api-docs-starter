@@ -12,9 +12,9 @@ The API uses **HTTP Basic authentication** over HTTPS. Create an *integration us
 <ApiCard
   title="request.headers"
   :items="[
-    { key: 'Authorization', description: '<code>Basic base64(username:password)</code>. Required on every request.', color: 'blue' },
-    { key: 'X-Client-Name', description: 'Name of your integration, such as <code>erp-sync</code>. Shown in audit logs and used for rate limiting. Required.', color: 'purple' },
-    { key: 'Api-Version', description: 'Release date of the v3 contract you were built against, such as <code>2025-01-15</code>. v3 only.', color: 'pink' }
+    { key: 'Authorization', description: '<code>Basic base64(username:password)</code>. Required on every request.' },
+    { key: 'X-Client-Name', description: 'Name of your integration, such as <code>erp-sync</code>. Shown in audit logs and used for rate limiting. Required.' },
+    { key: 'Api-Version', description: 'Release date of the v3 contract you were built against, such as <code>2025-01-15</code>. v3 only.' }
   ]"
 />
 

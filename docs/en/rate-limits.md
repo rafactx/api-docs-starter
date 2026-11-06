@@ -10,9 +10,9 @@ Limits are applied per workspace and per `X-Client-Name`:
 <ApiCard
   title="limits"
   :items="[
-    { key: 'Sustained', description: '60 requests per minute', color: 'blue' },
-    { key: 'Burst', description: 'up to 20 requests in one second', color: 'purple' },
-    { key: 'Over the limit', description: '<code>429 Too Many Requests</code> with a <code>Retry-After</code> header', color: 'yellow' }
+    { key: 'Sustained', description: '60 requests per minute' },
+    { key: 'Burst', description: 'up to 20 requests in one second' },
+    { key: 'Over the limit', description: '<code>429 Too Many Requests</code> with a <code>Retry-After</code> header' }
   ]"
 />
 
@@ -28,11 +28,11 @@ Limits are applied per workspace and per `X-Client-Name`:
 
 <script setup>
 const methodsTable = [
-  { key: 'GET', description: 'Read', color: 'blue' },
-  { key: 'POST', description: 'Create', color: 'green' },
-  { key: 'PUT', description: 'Replace (v1)', color: 'purple' },
-  { key: 'PATCH', description: 'Update only the fields you send (v3)', color: 'yellow' },
-  { key: 'DELETE', description: 'Delete. Never takes a body; IDs go in the path or query string.', color: 'red' }
+  { key: 'GET', description: 'Read' },
+  { key: 'POST', description: 'Create' },
+  { key: 'PUT', description: 'Replace (v1)' },
+  { key: 'PATCH', description: 'Update only the fields you send (v3)' },
+  { key: 'DELETE', description: 'Delete. Never takes a body; IDs go in the path or query string.' }
 ]
 </script>
 

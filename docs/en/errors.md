@@ -7,12 +7,12 @@ description: Status codes and error bodies returned by the Shelfline Field API.
 
 <script setup>
 const statusTable = [
-  { key: '200 / 201 / 204', description: 'Success. 201 when something was created, 204 when there is no body.', color: 'green' },
-  { key: '400', description: '<code>Bad Request</code>: malformed request or invalid field.', color: 'red' },
-  { key: '401', description: '<code>Unauthorized</code>: missing or invalid credentials.', color: 'red' },
-  { key: '404', description: '<code>Not Found</code>: the resource does not exist in this workspace.', color: 'purple' },
-  { key: '429', description: '<code>Too Many Requests</code>: wait for <code>Retry-After</code> seconds.', color: 'yellow' },
-  { key: '5xx', description: 'Server error. Safe to retry idempotent requests with backoff.', color: 'pink' }
+  { key: '200 / 201 / 204', description: 'Success. 201 when something was created, 204 when there is no body.' },
+  { key: '400', description: '<code>Bad Request</code>: malformed request or invalid field.' },
+  { key: '401', description: '<code>Unauthorized</code>: missing or invalid credentials.' },
+  { key: '404', description: '<code>Not Found</code>: the resource does not exist in this workspace.' },
+  { key: '429', description: '<code>Too Many Requests</code>: wait for <code>Retry-After</code> seconds.' },
+  { key: '5xx', description: 'Server error. Safe to retry idempotent requests with backoff.' }
 ]
 </script>
 

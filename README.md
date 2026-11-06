@@ -44,8 +44,8 @@ raw spec ──► hydrate ► fix ► validate ──► docs/public/openapi.<l
 
 - **Guides** are Markdown in `docs/{en,pt,es,fr}/`. Each locale has its own nav and sidebar in `docs/.vitepress/config.ts`.
 - **API reference**: `docs/.vitepress/components/ScalarApi.vue` embeds Scalar and picks the spec from the page language (`en` → `openapi.en.json`, `pt` → `openapi.pt-BR.json`, ...). Pass `spec-url` to override.
-- **Theme**: Scalar runs with `theme: 'none'` and its CSS variables are mapped onto VitePress's, so the reference follows the site's colors, fonts and dark mode. The palette lives in `docs/.vitepress/theme/theme.css`.
-- **Components**: `ApiCard` (key/description tables used in the guides), `HeroSection` + `SpotlightBackground` (landing page).
+- **Theme**: Scalar runs with `theme: 'none'` and its CSS variables are mapped onto VitePress's, so the reference follows the site's colors, fonts and dark mode. The brand color and fonts live in `docs/.vitepress/theme/style.css`, a thin layer over the VitePress default theme.
+- **Components**: `ApiCard` (key/description tables used in the guides), Each locale's home page is the stock VitePress hero, configured in `docs/<lang>/index.md`, with `HomeSpotlight` (a glow that follows the pointer) behind it.
 - **Language routing**: `/` (`docs/index.md`) sends the browser to `/pt/`, `/es/` or `/fr/` based on its language, and to `/en/` otherwise. Without JavaScript it shows a list of the four languages.
 
 ## Project structure
@@ -53,12 +53,13 @@ raw spec ──► hydrate ► fix ► validate ──► docs/public/openapi.<l
 ```text
 docs/
 ├── .vitepress/
-│   ├── components/      ApiCard, HeroSection, ScalarApi, SpotlightBackground
-│   ├── theme/           theme.css (palette), style.css, api-docs-responsive.css, sidebar.css, fonts.css
+│   ├── components/      ApiCard, HomeSpotlight, ScalarApi
+│   ├── theme/           style.css (brand, fonts, surfaces), fonts.css
 │   └── config.ts        locales, nav, sidebars
 ├── public/
 │   ├── openapi.{en,pt-BR,es,fr}.json   one spec per language
-│   ├── preview.png                     hero image (also used above)
+│   ├── preview.png                     screenshot used above
+│   ├── preview-{1080,1761}.webp        the same image on the home pages
 │   └── favicon.svg, logo-{light,dark}.svg
 ├── en/ pt/ es/ fr/      intro, authentication, rate-limits, examples, pagination, errors, api-reference
 └── index.md             language redirect
@@ -68,8 +69,8 @@ docs/
 
 1. Replace `docs/public/openapi.*.json` with your specs (one per language, or point every locale at the same file in `SPEC_BY_LANG` inside `ScalarApi.vue`).
 2. Rewrite the guide pages in `docs/<lang>/` and adjust the sidebars in `docs/.vitepress/config.ts`.
-3. Change the brand block in `docs/.vitepress/theme/theme.css` and the logos in `docs/public/`.
-4. Take a new `docs/public/preview.png` (the hero shows it inside a MacBook frame: screenshot at 1440×932 and composite it into the screen area).
+3. Change the brand block in `docs/.vitepress/theme/style.css` and the logos in `docs/public/`.
+4. Replace `docs/public/preview.png` and the two `preview-*.webp` files that the home pages show (1761×1075, a laptop frame with a 1440×932 screenshot composited into the screen).
 5. Deploy: any static host works. The live demo runs on Cloudflare Workers Static Assets: `pnpm run deploy` builds the site and runs `wrangler deploy` (config in `wrangler.jsonc`).
 
 ## Contributing

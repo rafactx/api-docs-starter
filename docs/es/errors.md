@@ -7,12 +7,12 @@ description: Códigos de estado y cuerpos de error que devuelve la Shelfline Fie
 
 <script setup>
 const statusTable = [
-  { key: '200 / 201 / 204', description: 'Éxito. 201 cuando se creó algo, 204 cuando no hay cuerpo.', color: 'green' },
-  { key: '400', description: '<code>Bad Request</code>: solicitud mal formada o campo no válido.', color: 'red' },
-  { key: '401', description: '<code>Unauthorized</code>: credenciales ausentes o no válidas.', color: 'red' },
-  { key: '404', description: '<code>Not Found</code>: el recurso no existe en este workspace.', color: 'purple' },
-  { key: '429', description: '<code>Too Many Requests</code>: espera los segundos indicados en <code>Retry-After</code>.', color: 'yellow' },
-  { key: '5xx', description: 'Error del servidor. Es seguro reintentar las solicitudes idempotentes con retroceso exponencial.', color: 'pink' }
+  { key: '200 / 201 / 204', description: 'Éxito. 201 cuando se creó algo, 204 cuando no hay cuerpo.' },
+  { key: '400', description: '<code>Bad Request</code>: solicitud mal formada o campo no válido.' },
+  { key: '401', description: '<code>Unauthorized</code>: credenciales ausentes o no válidas.' },
+  { key: '404', description: '<code>Not Found</code>: el recurso no existe en este workspace.' },
+  { key: '429', description: '<code>Too Many Requests</code>: espera los segundos indicados en <code>Retry-After</code>.' },
+  { key: '5xx', description: 'Error del servidor. Es seguro reintentar las solicitudes idempotentes con retroceso exponencial.' }
 ]
 </script>
 
