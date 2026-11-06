@@ -3,78 +3,53 @@ import { computed, onMounted, ref } from 'vue'
 import { withBase, useData } from 'vitepress'
 import SpotlightBackground from './SpotlightBackground.vue'
 
-const { lang } = useData()
+const HEADLINE = 'API Documentation Starter'
+const GITHUB_URL = 'https://github.com/rafactx/api-docs-starter'
 
 const translations = {
   pt: {
-    headline: 'API Documentation Starter',
     subtitle: 'Um portal de documentação de API multilíngue com VitePress e Scalar.\nEsta demonstração documenta a Shelfline Field API, uma API fictícia de execução no varejo.',
     primaryButtonText: 'Conheça a API',
     primaryButtonLink: '/pt/intro',
-    secondaryButtonText: 'GitHub',
-    secondaryButtonLink: 'https://github.com/rafactx/api-docs-starter',
     imageAltText: 'Preview da documentação API Documentation Starter'
   },
   en: {
-    headline: 'API Documentation Starter',
     subtitle: 'A multilingual API documentation portal built with VitePress and Scalar.\nThis demo documents the Shelfline Field API, a fictional retail field-execution API.',
     primaryButtonText: 'Explore the API',
     primaryButtonLink: '/en/intro',
-    secondaryButtonText: 'GitHub',
-    secondaryButtonLink: 'https://github.com/rafactx/api-docs-starter',
     imageAltText: 'Preview of the API Documentation Starter'
   },
   es: {
-    headline: 'API Documentation Starter',
     subtitle: 'Un portal de documentación de API multilingüe con VitePress y Scalar.\nEsta demo documenta la Shelfline Field API, una API ficticia de ejecución en el punto de venta.',
     primaryButtonText: 'Explora la API',
     primaryButtonLink: '/es/intro',
-    secondaryButtonText: 'GitHub',
-    secondaryButtonLink: 'https://github.com/rafactx/api-docs-starter',
     imageAltText: 'Vista previa de la documentación API Documentation Starter'
   },
   fr: {
-    headline: 'API Documentation Starter',
     subtitle: "Un portail de documentation d'API multilingue construit avec VitePress et Scalar.\nCette démo documente la Shelfline Field API, une API fictive d'exécution terrain en magasin.",
     primaryButtonText: "Découvrez l'API",
     primaryButtonLink: '/fr/intro',
-    secondaryButtonText: "GitHub",
-    secondaryButtonLink: 'https://github.com/rafactx/api-docs-starter',
     imageAltText: "Aperçu de la documentation API Documentation Starter"
   }
 }
 
-// Unknown languages fall back to English.
+const { lang } = useData()
 const t = computed(() => translations[lang.value as keyof typeof translations] || translations.en)
 
-const props = defineProps({
-  imageSrc: {
-    type: String,
-    default: '/preview.png'
-  },
-  animationDelay: {
-    type: Number,
-    default: 100
-  }
+const props = withDefaults(defineProps<{ imageSrc?: string; animationDelay?: number }>(), {
+  imageSrc: '/preview.png',
+  animationDelay: 100
 })
 
-const isImageLoading = ref(true)
+const headlineWords = HEADLINE.split(' ')
 const animationStarted = ref(false)
-
-const headlineWords = computed(() =>
-  t.value.headline.trim().split(' ').filter(Boolean)
-)
-
-const onImageLoad = () => (isImageLoading.value = false)
-const onImageError = (e: Event) => {
-  isImageLoading.value = false
-  console.error('Failed to load the preview image:', e)
-}
+const isImageLoading = ref(true)
+const image = ref<HTMLImageElement | null>(null)
 
 onMounted(() => {
   requestAnimationFrame(() => (animationStarted.value = true))
-  const img = document.querySelector('.preview-image') as HTMLImageElement | null
-  if (img?.complete) isImageLoading.value = false
+  // The image may finish loading before hydration attaches the load listener.
+  if (image.value?.complete) isImageLoading.value = false
 })
 </script>
 
@@ -82,13 +57,13 @@ onMounted(() => {
   <SpotlightBackground>
     <div class="hero-container">
       <main class="main-content">
-        <h1 class="headline" role="banner">
+        <h1 class="headline">
           <span
             v-for="(word, idx) in headlineWords"
             :key="idx"
             class="word-span"
             :class="{ 'is-visible': animationStarted }"
-            :style="{ transitionDelay: `${idx * animationDelay}ms` }"
+            :style="{ transitionDelay: `${idx * props.animationDelay}ms` }"
           >
             {{ word }}
           </span>
@@ -102,32 +77,31 @@ onMounted(() => {
           <a
             :href="withBase(t.primaryButtonLink)"
             class="button button--primary"
-            :aria-label="`${t.primaryButtonText}`"
           >
             <span class="button__text">{{ t.primaryButtonText }}</span>
             <span class="button__icon" aria-hidden="true">→</span>
           </a>
           <a
-            :href="t.secondaryButtonLink"
+            :href="GITHUB_URL"
             class="button button--secondary"
             target="_blank"
             rel="noopener noreferrer"
-            :aria-label="`${t.secondaryButtonText}`"
           >
-            <span class="button__text">{{ t.secondaryButtonText }}</span>
+            <span class="button__text">GitHub</span>
           </a>
         </div>
 
         <div class="image-preview" :class="{ 'is-visible': animationStarted }">
           <div class="image-container">
             <img
+              ref="image"
               class="preview-image"
-              :src="withBase(imageSrc)"
+              :src="withBase(props.imageSrc)"
               :alt="t.imageAltText"
               loading="eager"
               decoding="async"
-              @load="onImageLoad"
-              @error="onImageError"
+              @load="isImageLoading = false"
+              @error="isImageLoading = false"
             />
             <div v-if="isImageLoading" class="image-skeleton" aria-hidden="true" />
           </div>
@@ -138,13 +112,6 @@ onMounted(() => {
 </template>
 
 <style scoped>
-:host {
-  --primary-color: #3b82f6;
-  --border-color: var(--vp-c-divider);
-  --shadow-soft: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-  --border-radius: 0.5rem;
-}
-
 .hero-container {
   margin: 2.5rem auto;
   padding: 0 1rem;
@@ -233,7 +200,7 @@ onMounted(() => {
   user-select: none;
   -webkit-tap-highlight-color: transparent;
   transition: all var(--vp-transition-timing-base) var(--vp-ease-out);
-  transform: translateZ(0); /* Force hardware acceleration */
+  transform: translateZ(0);
   backface-visibility: hidden;
 }
 
@@ -353,7 +320,6 @@ onMounted(() => {
   position: relative;
   overflow: visible;
   border-radius: 0.75rem;
-  box-shadow: var(--shadow-soft);
 }
 
 .preview-image {
@@ -381,13 +347,8 @@ onMounted(() => {
 
 .is-visible {
   opacity: 1;
-  transform: translateY(0) blur(0);
 }
 
-@keyframes pulse-gradient {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 1; }
-}
 @keyframes skeleton-loading {
   0% { background-position: 200% 0; }
   100% { background-position: -200% 0; }
@@ -425,13 +386,10 @@ onMounted(() => {
   .buttons-container,
   .image-preview,
   .button,
-  .button::before,
   .button--primary::before,
   .button--secondary::before,
   .button__icon,
-  .preview-image,
-  .gradient-pulse,
-  .gradient-pulse--horizontal {
+  .preview-image {
     transition: none !important;
     animation: none !important;
     transform: none !important;
