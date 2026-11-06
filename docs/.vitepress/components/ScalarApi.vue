@@ -114,19 +114,6 @@ onMounted(() => {
   100% { transform: rotate(360deg); }
 }
 
-/* Full-width page layout for the reference */
-.VPDoc {
-  padding: 0 !important;
-}
-.VPDoc .container {
-  max-width: 100% !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-.VPDocFooter {
-  display: none;
-}
-
 /* Map Scalar's theme variables onto VitePress's. */
 .scalar-api-reference {
   --scalar-font: var(--vp-font-family-body, 'Poppins', sans-serif);
