@@ -4,7 +4,7 @@ Thanks for taking a look. This is a small project maintained by one person, so t
 
 ## Setup
 
-Requires Node.js 20 or later (CI uses 22) and pnpm 10. With Corepack, the pnpm version pinned in `package.json` is picked up automatically:
+Requires Node.js 22 or later and pnpm 10. With Corepack, the pnpm version pinned in `package.json` is picked up automatically:
 
 ```bash
 corepack enable

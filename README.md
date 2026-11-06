@@ -20,7 +20,7 @@ The company's API is **not** included. The demo documents **Shelfline Field API*
 
 ## Quickstart
 
-Requires Node.js 20+ and pnpm 10 (`corepack enable` picks up the version pinned in `package.json`).
+Requires Node.js 22+ and pnpm 10 (`corepack enable` picks up the version pinned in `package.json`).
 
 ```bash
 git clone https://github.com/rafactx/api-docs-starter.git

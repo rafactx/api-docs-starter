@@ -20,7 +20,7 @@ A API da empresa **não** está incluída. A demo documenta a **Shelfline Field 
 
 ## Início rápido
 
-Requer Node.js 20+ e pnpm 10 (`corepack enable` usa a versão fixada no `package.json`).
+Requer Node.js 22+ e pnpm 10 (`corepack enable` usa a versão fixada no `package.json`).
 
 ```bash
 git clone https://github.com/rafactx/api-docs-starter.git

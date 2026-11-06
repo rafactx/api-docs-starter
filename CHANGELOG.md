@@ -30,7 +30,7 @@ the state described under Unreleased.
 
 ### Changed
 
-- Requires Node.js 20 or later and pnpm 10.
+- Requires Node.js 22 or later and pnpm 10.
 - The build fails on dead links (`ignoreDeadLinks` is no longer set).
 - Scalar's loading and error states use render functions, so they display
   with the runtime-only Vue build.
