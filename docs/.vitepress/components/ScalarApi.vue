@@ -1,41 +1,28 @@
 <template>
-  <div v-if="shouldRender" class="scalar-api-container">
-    <ApiReference
-      :key="`${themeKey}-${resolvedSpecUrl}`"
-      :configuration="scalarConfig"
-      @error="handleError"
-    >
-      <template #footer>
-        </template>
-    </ApiReference>
+  <div v-if="isMounted" class="scalar-api-container">
+    <ApiReference :key="`${themeKey}-${resolvedSpecUrl}`" :configuration="scalarConfig" />
   </div>
-  <div v-else class="loading">
-    <div class="loading-spinner"></div>
+  <div v-else class="scalar-api-status">
+    <div class="scalar-api-spinner"></div>
     <p>Loading API reference…</p>
   </div>
 </template>
 
-<script setup>
-import { inBrowser, useData } from 'vitepress'
-import { computed, onMounted, ref, watchEffect, defineAsyncComponent } from 'vue'
+<script setup lang="ts">
+import { useData } from 'vitepress'
+import { computed, defineAsyncComponent, h, onMounted, ref } from 'vue'
 
-// Dynamic import for Scalar API Reference to reduce initial bundle size
+// Scalar is large, so it is loaded only on the API reference page.
+// Loading and error states use render functions: the runtime-only Vue build cannot compile `template` strings.
+// Their styles are global (below) because scoped styles do not reach these child components.
 const ApiReference = defineAsyncComponent({
-  loader: () => import('@scalar/api-reference').then(module => module.ApiReference),
+  loader: () => import('@scalar/api-reference').then((module) => module.ApiReference),
   loadingComponent: {
-    template: `
-      <div class="loading">
-        <div class="loading-spinner"></div>
-        <p>Loading API reference…</p>
-      </div>
-    `
+    render: () =>
+      h('div', { class: 'scalar-api-status' }, [h('div', { class: 'scalar-api-spinner' }), h('p', 'Loading API reference…')])
   },
   errorComponent: {
-    template: `
-      <div class="error">
-        <p>Could not load the API reference. Please reload the page.</p>
-      </div>
-    `
+    render: () => h('div', { class: 'scalar-api-status' }, h('p', 'Could not load the API reference. Please reload the page.'))
   },
   delay: 200,
   timeout: 10000
@@ -46,11 +33,11 @@ const props = defineProps({
   specUrl: {
     type: String,
     default: ''
-  },
+  }
 })
 
 // One spec per locale, produced by the openapi-fixer pipeline (see README).
-const SPEC_BY_LANG = {
+const SPEC_BY_LANG: Record<string, string> = {
   en: '/openapi.en.json',
   pt: '/openapi.pt-BR.json',
   es: '/openapi.es.json',
@@ -58,59 +45,40 @@ const SPEC_BY_LANG = {
 }
 
 const { isDark, lang } = useData()
-const resolvedSpecUrl = computed(
-  () => props.specUrl || SPEC_BY_LANG[lang.value] || SPEC_BY_LANG.en
-)
-const isMounted = ref(false)
+const resolvedSpecUrl = computed(() => props.specUrl || SPEC_BY_LANG[lang.value] || SPEC_BY_LANG.en)
 
-// Reactive key that forces component recreation on theme change. Essential!
+// Scalar reads its configuration once, so the component is recreated when the theme changes.
 const themeKey = computed(() => (isDark.value ? 'dark' : 'light'))
 
-// Optimized configuration for complete integration with VitePress theme
 const scalarConfig = computed(() => ({
   spec: {
-    url: resolvedSpecUrl.value,
+    url: resolvedSpecUrl.value
   },
-  // 1. 'none' disables Scalar's built-in themes; ours is defined in the <style> block below
-  theme: 'none',
-  // 2. We don't load Scalar's default fonts since we already have our own
+  // 'none' disables Scalar's built-in themes; the <style> block below maps its variables onto VitePress's.
+  theme: 'none' as const,
+  darkMode: isDark.value,
   withDefaultFonts: false,
-  // 3. The theme selector is VitePress's, so we hide Scalar's
+  // VitePress already has a theme switch.
   hideDarkModeButton: true,
-  layout: 'modern',
+  layout: 'modern' as const,
   showSidebar: true,
-  searchHotKey: 'k',
+  searchHotKey: 'k' as const,
   metaData: {
     title: 'Shelfline Field API Reference',
-    description: 'Interactive reference for the fictional Shelfline Field API',
-  },
+    description: 'Interactive reference for the fictional Shelfline Field API'
+  }
 }))
 
-const shouldRender = computed(() => inBrowser && isMounted.value)
-
-const handleError = (err) => {
-  console.error('ScalarApi error:', err)
-}
-
+// Render Scalar only on the client, after the page is idle.
+const isMounted = ref(false)
 onMounted(() => {
-  if (!inBrowser) return
-  // Performance optimization to mount the heavy component
-  if (window.requestIdleCallback) {
-    window.requestIdleCallback(() => { isMounted.value = true })
-  } else {
-    setTimeout(() => { isMounted.value = true }, 0)
-  }
-})
-
-watchEffect(() => {
-  if (isMounted.value) {
-    console.log(`[Scalar] theme synced with VitePress: ${themeKey.value}`)
-  }
+  const show = () => (isMounted.value = true)
+  if ('requestIdleCallback' in window) window.requestIdleCallback(show)
+  else setTimeout(show, 0)
 })
 </script>
 
-<style scoped>
-/* Scoped styles for container and loading, as you already had */
+<style>
 .scalar-api-container {
   display: flex;
   flex-direction: column;
@@ -120,7 +88,7 @@ watchEffect(() => {
   padding: 0;
 }
 
-.loading {
+.scalar-api-status {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -131,24 +99,22 @@ watchEffect(() => {
   color: var(--vp-c-text-2);
 }
 
-.loading-spinner {
+.scalar-api-spinner {
   width: 40px;
   height: 40px;
   border: 3px solid var(--vp-c-bg-mute);
   border-top: 3px solid var(--vp-c-brand-1);
   border-radius: 50%;
-  animation: spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+  animation: scalar-api-spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
   box-shadow: var(--vp-shadow-1);
 }
 
-@keyframes spin {
+@keyframes scalar-api-spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
-</style>
 
-<style>
-/* Global styles to reset page layout and integrate Scalar */
+/* Full-width page layout for the reference */
 .VPDoc {
   padding: 0 !important;
 }
@@ -184,12 +150,12 @@ watchEffect(() => {
   --scalar-background-3: var(--vp-c-bg-soft);
   --scalar-background-accent: var(--vp-c-brand-soft);
 
-  /* Borders and Radius (Apple-like) */
+  /* Borders and radius */
   --scalar-border-color: var(--vp-c-border);
   --scalar-border-radius: var(--vp-radius-md);
   --scalar-border-radius-lg: var(--vp-radius-lg);
 
-  /* Shadows (Apple-like) */
+  /* Shadows */
   --scalar-shadow-1: var(--vp-shadow-1);
   --scalar-shadow-2: var(--vp-shadow-2);
   --scalar-shadow-3: var(--vp-shadow-3);
@@ -220,7 +186,7 @@ watchEffect(() => {
   font-family: var(--scalar-heading-font);
 }
 
-/* === INTERNAL COMPONENTS POLISHING (Apple-like) === */
+/* === Scalar component overrides === */
 
 /* Inputs and Search Button */
 .scalar-api-reference .scalar-search-input,
@@ -272,7 +238,7 @@ watchEffect(() => {
   border-radius: var(--vp-radius-md) !important;
 }
 
-/* Custom scrollbar to match your theme */
+/* Scrollbar */
 .scalar-api-reference ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
