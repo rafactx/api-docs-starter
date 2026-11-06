@@ -1,0 +1,33 @@
+name: Bug report
+description: Something in the portal or the build does not work as expected.
+labels: [bug]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you saw, and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Page URL or command (`pnpm dev`, `pnpm build`), language, light or dark theme.
+      placeholder: |
+        1. Open /pt/api-reference
+        2. Switch to dark mode
+        3. ...
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Browser and OS, or Node.js and pnpm versions for build problems.
+      placeholder: Safari 18 on iOS / Node 22.11, pnpm 10.34
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs or screenshots
+      description: Console errors, build output, or a screenshot.
