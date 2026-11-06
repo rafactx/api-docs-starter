@@ -4,26 +4,14 @@ sidebar: false
 aside: false
 ---
 
-
 <HeroSection />
 
 <script setup>
 import { onMounted } from 'vue'
 
-// SSR-safe language detection and redirect
 onMounted(() => {
-  if (typeof window !== 'undefined' && typeof navigator !== 'undefined') {
-    const userLang = navigator.language || navigator.userLanguage
-    if (userLang.startsWith('pt')) {
-      window.location.replace('/pt/')
-    } else if (userLang.startsWith('es')) {
-      window.location.replace('/es/')
-    } else if (userLang.startsWith('fr')) {
-      window.location.replace('/fr/')
-    } else {
-      window.location.replace('/en/')
-    }
-  }
+  const lang = navigator.language.slice(0, 2)
+  window.location.replace(['pt', 'es', 'fr'].includes(lang) ? `/${lang}/` : '/en/')
 })
 </script>
 
