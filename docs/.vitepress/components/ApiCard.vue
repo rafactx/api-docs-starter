@@ -15,30 +15,26 @@
         class="api-macos-row"
       >
         <span class="api-macos-key" :class="item.color">{{ item.key }}</span>
-        <span class="api-macos-value">
-          <span v-html="item.description"></span>
-        </span>
+        <span class="api-macos-value" v-html="item.description"></span>
       </div>
     </div>
   </div>
 </template>
 
-<script setup>
-defineProps({
-  title: {
-    type: String,
-    default: 'request.headers'
-  },
-  items: {
-    type: Array,
-    required: true
-  }
+<script setup lang="ts">
+interface ApiCardItem {
+  key: string
+  description: string
+  color?: string
+}
+
+withDefaults(defineProps<{ title?: string; items: ApiCardItem[] }>(), {
+  title: 'request.headers'
 })
 </script>
 
 <style scoped>
 .api-macos-window {
-  /* Glassmorphism: clean, soft, shadow only, no border! */
   background: var(--api-macos-bg, rgba(255,255,255,0.7));
   border-radius: 14px;
   box-shadow: 0 6px 32px 0 rgba(28,28,28,0.16), 0 1.5px 3px 0 rgba(28,28,30,0.05);
@@ -66,7 +62,6 @@ defineProps({
   );
   position: relative;
   z-index: 1;
-  /* visual feedback: soft bottom border only, but ultra subtle */
   box-shadow: 0 1px 0 0 rgba(28,28,30,0.03);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -108,7 +103,6 @@ defineProps({
   transition: color 0.15s;
 }
 
-/* Content rows */
 .api-macos-content {
   font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
   font-size: 14px;
@@ -169,7 +163,7 @@ defineProps({
   }
 }
 
-/* DARK MODE */
+/* Dark mode */
 :root.dark .api-macos-window {
   --api-macos-bg: rgba(32,34,38,0.72);
   background: var(--api-macos-bg);
@@ -182,9 +176,6 @@ defineProps({
 :root.dark .api-macos-title {
   color: #eee;
   text-shadow: 0 1px 2px rgba(0,0,0,0.22);
-}
-:root.dark .api-macos-content {
-  background: transparent;
 }
 :root.dark .api-macos-row {
   border-bottom: 1px solid rgba(220,220,230,0.04);

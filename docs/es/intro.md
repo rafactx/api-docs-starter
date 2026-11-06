@@ -8,7 +8,7 @@ description: Qué hace la Shelfline Field API y cómo hacer tu primera solicitud
 La Shelfline Field API conecta tus sistemas con Shelfline, una plataforma (ficticia) para equipos de campo del sector retail. Úsala para sincronizar tu catálogo de tiendas y productos, planificar las rutas que siguen tus representantes de campo y leer las encuestas que completan en cada visita.
 
 ::: info Una API de demostración
-Shelfline no existe. Este portal es un ejemplo funcional de un sitio de documentación de API multilingüe, y la [referencia de la API](./api-reference) se genera a partir de una especificación depurada con [openapi-fixer](https://github.com/rafactx/openapi-fixer-v2). Las solicitudes a `shelfline.example` no se resolverán.
+Shelfline no existe. Este portal es un ejemplo funcional de un sitio de documentación de API multilingüe, y la [referencia de la API](./api-reference) se genera a partir de una especificación depurada con [openapi-fixer](https://github.com/rafactx/openapi-fixer). Las solicitudes a `shelfline.example` no se resolverán.
 :::
 
 ## URL base

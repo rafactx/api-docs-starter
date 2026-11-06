@@ -24,12 +24,3 @@
   font-style: normal;
   font-display: swap;
 }
-
-/* Zilla Slab - Highlights */
-@font-face {
-  font-family: 'Zilla Slab';
-  src: url('/fonts/ZillaSlab-SemiBold.woff2') format('woff2');
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}

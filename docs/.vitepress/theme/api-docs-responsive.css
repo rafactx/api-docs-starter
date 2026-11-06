@@ -1,9 +1,6 @@
-/* ===================================================================
-   API DOCS RESPONSIVE STYLES - MOBILE-FIRST
-   Specific styles for API documentation with mobile focus
-   =================================================================== */
+/* Styles for VitePress content and for classes Scalar renders (.badge, .breadcrumb, .endpoint-method). */
 
-/* === VITEPRESS CALLOUTS CUSTOMIZATION === */
+/* Callouts */
 .custom-block {
   margin: 1rem 0;
   border-left: 4px solid transparent;
@@ -50,7 +47,7 @@
   gap: 0.5rem;
 }
 
-/* === LISTAS RESPONSIVAS === */
+/* Lists */
 .VPDoc ul,
 .VPDoc ol {
   padding-left: 1.25rem;
@@ -74,7 +71,7 @@
   padding-left: 1rem;
 }
 
-/* === LINKS AND NAVIGATION === */
+/* Links */
 .VPDoc a {
   color: var(--vp-c-brand);
   text-decoration: none;
@@ -104,7 +101,7 @@
   opacity: 0.7;
 }
 
-/* === BREADCRUMBS === */
+/* Breadcrumbs */
 .breadcrumb {
   display: flex;
   flex-wrap: wrap;
@@ -117,22 +114,7 @@
   font-size: clamp(0.75rem, 2vw, 0.875rem);
 }
 
-.breadcrumb-item {
-  color: var(--vp-c-text-2);
-}
-
-.breadcrumb-item:not(:last-child)::after {
-  content: "/";
-  margin-left: 0.5rem;
-  color: var(--vp-c-text-3);
-}
-
-.breadcrumb-item.active {
-  color: var(--vp-c-brand);
-  font-weight: 500;
-}
-
-/* === BADGES AND TAGS === */
+/* Badges */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -171,7 +153,7 @@
   border-color: #ff3b30;
 }
 
-/* === CODE AND SYNTAX === */
+/* Code blocks */
 .VPDoc pre {
   position: relative;
   margin: 1.5rem 0;
@@ -193,29 +175,7 @@
   border: none;
 }
 
-/* Copy code button */
-.copy-code-button {
-  position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
-  padding: 0.5rem;
-  background: var(--vp-c-bg);
-  border: 1px solid var(--vp-c-border);
-  border-radius: var(--vp-radius-sm);
-  color: var(--vp-c-text-2);
-  cursor: pointer;
-  font-size: 0.75rem;
-  opacity: 0.7;
-  transition: all var(--vp-transition-timing-base) var(--vp-ease-out);
-}
-
-.copy-code-button:hover {
-  opacity: 1;
-  background: var(--vp-c-brand-soft);
-  color: var(--vp-c-brand);
-}
-
-/* === SEPARADORES === */
+/* Horizontal rules */
 .VPDoc hr {
   margin: 2rem 0;
   border: none;
@@ -227,32 +187,6 @@
     var(--vp-c-divider) 80%,
     transparent
   );
-}
-
-/* === ENDPOINT CARDS === */
-.endpoint-card {
-  margin: 1.5rem 0;
-  border-radius: var(--vp-radius-lg);
-  border: 1px solid var(--vp-c-border);
-  background: var(--vp-c-bg);
-  overflow: hidden;
-  box-shadow: var(--vp-shadow-1);
-  transition: all var(--vp-transition-timing-base) var(--vp-ease-out);
-}
-
-.endpoint-card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--vp-shadow-2);
-}
-
-.endpoint-header {
-  padding: 1rem 1.25rem;
-  background: var(--vp-c-bg-soft);
-  border-bottom: 1px solid var(--vp-c-border);
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  flex-wrap: wrap;
 }
 
 .endpoint-method {
@@ -284,74 +218,6 @@
   color: #ff3b30;
 }
 
-.endpoint-url {
-  font-family: var(--vp-font-family-mono);
-  font-size: clamp(0.8rem, 2.2vw, 0.9rem);
-  color: var(--vp-c-text-1);
-  word-break: break-all;
-  flex: 1;
-  min-width: 0;
-}
-
-.endpoint-body {
-  padding: 1.25rem;
-}
-
-/* === PARAMETER TABLES === */
-.params-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 1rem 0;
-  border-radius: var(--vp-radius-md);
-  overflow: hidden;
-  border: 1px solid var(--vp-c-border);
-  background: var(--vp-c-bg);
-  font-size: clamp(0.75rem, 2vw, 0.875rem);
-}
-
-.params-table th {
-  background: var(--vp-c-bg-soft);
-  padding: 0.75rem;
-  text-align: left;
-  font-weight: 600;
-  color: var(--vp-c-text-1);
-  border-bottom: 1px solid var(--vp-c-border);
-}
-
-.params-table td {
-  padding: 0.75rem;
-  border-bottom: 1px solid var(--vp-c-divider);
-  vertical-align: top;
-}
-
-.params-table tr:hover {
-  background: var(--vp-c-bg-soft);
-}
-
-.param-name {
-  font-family: var(--vp-font-family-mono);
-  font-weight: 600;
-  color: var(--vp-c-brand);
-}
-
-.param-type {
-  font-family: var(--vp-font-family-mono);
-  color: var(--vp-c-text-2);
-  font-size: 0.85em;
-}
-
-.param-required {
-  color: #ff3b30;
-  font-weight: 600;
-  font-size: 0.8em;
-}
-
-.param-optional {
-  color: var(--vp-c-text-3);
-  font-size: 0.8em;
-}
-
-/* === PROGRESS ENHANCEMENT (TABLETS+) === */
 @media (min-width: 768px) {
   .custom-block {
     margin: 1.5rem 0;
@@ -363,98 +229,30 @@
     padding-left: 1.5rem;
   }
 
-  .endpoint-header {
-    padding: 1.25rem 1.5rem;
-    flex-wrap: nowrap;
-  }
-
-  .endpoint-body {
-    padding: 1.5rem;
-  }
-
-  .params-table th,
-  .params-table td {
-    padding: 1rem;
-  }
-
   .breadcrumb {
     padding: 1rem 1.25rem;
   }
 }
 
-/* === DESKTOP (1024px+) === */
 @media (min-width: 1024px) {
   .custom-block {
     margin: 2rem 0;
     padding: 1.5rem 2rem;
   }
-
-  .endpoint-card {
-    margin: 2rem 0;
-  }
-
-  .endpoint-header {
-    padding: 1.5rem 2rem;
-  }
-
-  .endpoint-body {
-    padding: 2rem;
-  }
-
-  .params-table th,
-  .params-table td {
-    padding: 1.25rem;
-  }
 }
 
-/* === DARK MODE OPTIMIZATIONS === */
-.dark .endpoint-card {
-  background: var(--vp-c-bg-alt);
-  border-color: var(--vp-c-border);
-}
-
-.dark .endpoint-header {
-  background: var(--vp-c-bg-soft);
-}
-
-.dark .params-table {
-  background: var(--vp-c-bg-alt);
-  border-color: var(--vp-c-border);
-}
-
-.dark .params-table th {
-  background: var(--vp-c-bg-soft);
-}
-
-/* === ACCESSIBILITY === */
 @media (prefers-reduced-motion: reduce) {
   .custom-block,
-  .endpoint-card,
   .VPDoc a {
     transition: none !important;
     transform: none !important;
   }
 }
 
-/* === PRINT OPTIMIZATIONS === */
 @media print {
   .custom-block {
     break-inside: avoid;
     box-shadow: none !important;
     border: 1px solid #ccc !important;
-  }
-
-  .endpoint-card {
-    break-inside: avoid;
-    box-shadow: none !important;
-    border: 1px solid #ccc !important;
-  }
-
-  .params-table {
-    break-inside: avoid;
-  }
-
-  .copy-code-button {
-    display: none !important;
   }
 }

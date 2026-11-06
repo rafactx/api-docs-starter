@@ -2,32 +2,14 @@
 layout: page
 sidebar: false
 aside: false
+head:
+  - - script
+    - {}
+    - "const l = navigator.language.slice(0, 2); location.replace(['pt', 'es', 'fr'].includes(l) ? `/${l}/` : '/en/')"
 ---
 
+Choose a language:
 
-<HeroSection />
-
-<script setup>
-import { onMounted } from 'vue'
-
-// SSR-safe language detection and redirect
-onMounted(() => {
-  if (typeof window !== 'undefined' && typeof navigator !== 'undefined') {
-    const userLang = navigator.language || navigator.userLanguage
-    if (userLang.startsWith('pt')) {
-      window.location.replace('/pt/')
-    } else if (userLang.startsWith('es')) {
-      window.location.replace('/es/')
-    } else if (userLang.startsWith('fr')) {
-      window.location.replace('/fr/')
-    } else {
-      window.location.replace('/en/')
-    }
-  }
-})
-</script>
-
-Not redirected? Choose a language:
 - [Português](/pt/)
 - [English](/en/)
 - [Español](/es/)
