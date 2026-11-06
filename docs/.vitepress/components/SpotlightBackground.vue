@@ -7,7 +7,6 @@
     <!-- Background with spotlight -->
     <div
       class="spotlight-glow"
-      ref="glowRef"
       :style="spotlightStyle"
     />
 
@@ -39,9 +38,8 @@ const props = withDefaults(defineProps<SpotlightProps>(), {
 
 // Refs
 const containerRef = ref<HTMLElement | null>(null)
-const glowRef = ref<HTMLElement | null>(null)
 const isActive = ref(false)
-const mousePosition = ref({ x: 50, y: 50 }) // Percentuais
+const mousePosition = ref({ x: 50, y: 50 }) // percentages
 
 // Computed styles
 const spotlightStyle = computed(() => ({

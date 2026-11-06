@@ -23,16 +23,15 @@
   </div>
 </template>
 
-<script setup>
-defineProps({
-  title: {
-    type: String,
-    default: 'request.headers'
-  },
-  items: {
-    type: Array,
-    required: true
-  }
+<script setup lang="ts">
+interface ApiCardItem {
+  key: string
+  description: string
+  color?: string
+}
+
+withDefaults(defineProps<{ title?: string; items: ApiCardItem[] }>(), {
+  title: 'request.headers'
 })
 </script>
 
