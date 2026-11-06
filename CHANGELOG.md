@@ -4,11 +4,9 @@ Notable changes to this project are recorded here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and versions follow
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-No version has been tagged yet. `package.json` already says `0.1.0`, the
-version the first tag (`v0.1.0`) will carry, cut from the state described
-under Unreleased.
-
 ## [Unreleased]
+
+## [0.1.0] - 2026-11-05
 
 ### Added
 
@@ -61,4 +59,5 @@ under Unreleased.
 - CSS rules for classes nothing renders, unused design tokens and the unused
   Zilla Slab font.
 
-[Unreleased]: https://github.com/rafactx/api-docs-starter/commits/main
+[Unreleased]: https://github.com/rafactx/api-docs-starter/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/rafactx/api-docs-starter/releases/tag/v0.1.0
