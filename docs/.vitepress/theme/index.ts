@@ -1,23 +1,19 @@
-import '@scalar/api-reference/style.css'
 import type { Theme } from 'vitepress'
 import DefaultTheme from 'vitepress/theme'
+import { h } from 'vue'
 
 import ApiCard from '../components/ApiCard.vue'
-import HeroSection from '../components/HeroSection.vue'
+import HomeSpotlight from '../components/HomeSpotlight.vue'
 import ScalarApi from '../components/ScalarApi.vue'
 
-import './api-docs-responsive.css'
 import './fonts.css'
-import './sidebar.css'
 import './style.css'
 
-const theme: Theme = {
+export default {
   extends: DefaultTheme,
+  Layout: () => h(DefaultTheme.Layout, null, { 'home-hero-before': () => h(HomeSpotlight) }),
   enhanceApp({ app }) {
-    app.component('HeroSection', HeroSection)
-    app.component('ScalarApi', ScalarApi)
     app.component('ApiCard', ApiCard)
+    app.component('ScalarApi', ScalarApi)
   }
-}
-
-export default theme
+} satisfies Theme

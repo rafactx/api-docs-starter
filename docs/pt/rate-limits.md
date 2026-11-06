@@ -10,9 +10,9 @@ Os limites são aplicados por workspace e por `X-Client-Name`:
 <ApiCard
   title="limites"
   :items="[
-    { key: 'Sustained', description: '60 requisições por minuto', color: 'blue' },
-    { key: 'Burst', description: 'até 20 requisições em um segundo', color: 'purple' },
-    { key: 'Over the limit', description: '<code>429 Too Many Requests</code> com o cabeçalho <code>Retry-After</code>', color: 'yellow' }
+    { key: 'Sustained', description: '60 requisições por minuto' },
+    { key: 'Burst', description: 'até 20 requisições em um segundo' },
+    { key: 'Over the limit', description: '<code>429 Too Many Requests</code> com o cabeçalho <code>Retry-After</code>' }
   ]"
 />
 
@@ -28,11 +28,11 @@ Os limites são aplicados por workspace e por `X-Client-Name`:
 
 <script setup>
 const methodsTable = [
-  { key: 'GET', description: 'Leitura', color: 'blue' },
-  { key: 'POST', description: 'Criação', color: 'green' },
-  { key: 'PUT', description: 'Substituição (v1)', color: 'purple' },
-  { key: 'PATCH', description: 'Atualiza somente os campos enviados (v3)', color: 'yellow' },
-  { key: 'DELETE', description: 'Exclusão. Nunca recebe corpo; os IDs vão no caminho ou na query string.', color: 'red' }
+  { key: 'GET', description: 'Leitura' },
+  { key: 'POST', description: 'Criação' },
+  { key: 'PUT', description: 'Substituição (v1)' },
+  { key: 'PATCH', description: 'Atualiza somente os campos enviados (v3)' },
+  { key: 'DELETE', description: 'Exclusão. Nunca recebe corpo; os IDs vão no caminho ou na query string.' }
 ]
 </script>
 

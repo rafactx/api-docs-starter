@@ -1,26 +1,22 @@
-/* Hepta Slab - Headings */
+/* Self-hosted. Headings ship in one weight (600); see style.css. */
+
 @font-face {
   font-family: 'Hepta Slab';
   src: url('/fonts/HeptaSlab-SemiBold.woff2') format('woff2');
   font-weight: 600;
-  font-style: normal;
   font-display: swap;
 }
 
-/* Poppins - Base text */
 @font-face {
   font-family: 'Poppins';
   src: url('/fonts/Poppins-Regular.woff2') format('woff2');
   font-weight: 400;
-  font-style: normal;
   font-display: swap;
 }
 
-/* Poppins - Semibold (buttons and light emphasis) */
 @font-face {
   font-family: 'Poppins';
   src: url('/fonts/Poppins-SemiBold.woff2') format('woff2');
   font-weight: 600;
-  font-style: normal;
   font-display: swap;
 }

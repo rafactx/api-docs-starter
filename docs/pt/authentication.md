@@ -12,9 +12,9 @@ A API usa **autenticação HTTP Basic** sobre HTTPS. Crie um *usuário de integr
 <ApiCard
   title="request.headers"
   :items="[
-    { key: 'Authorization', description: '<code>Basic base64(username:password)</code>. Obrigatório em toda requisição.', color: 'blue' },
-    { key: 'X-Client-Name', description: 'Nome da sua integração, como <code>erp-sync</code>. Aparece nos logs de auditoria e é usado no controle de limite de requisições. Obrigatório.', color: 'purple' },
-    { key: 'Api-Version', description: 'Data de lançamento do contrato v3 para o qual você desenvolveu, como <code>2025-01-15</code>. Somente v3.', color: 'pink' }
+    { key: 'Authorization', description: '<code>Basic base64(username:password)</code>. Obrigatório em toda requisição.' },
+    { key: 'X-Client-Name', description: 'Nome da sua integração, como <code>erp-sync</code>. Aparece nos logs de auditoria e é usado no controle de limite de requisições. Obrigatório.' },
+    { key: 'Api-Version', description: 'Data de lançamento do contrato v3 para o qual você desenvolveu, como <code>2025-01-15</code>. Somente v3.' }
   ]"
 />
 

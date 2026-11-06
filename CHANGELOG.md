@@ -6,6 +6,19 @@ Notable changes to this project are recorded here. The format follows
 
 ## [Unreleased]
 
+### Changed
+
+- The theme is a thin layer over the VitePress default theme: one
+  `style.css`, Lucide icons in the sidebar, and the same header geometry on
+  every page. `ApiCard` is a plain key/description list.
+- Each home page is the stock VitePress hero with a pointer-following
+  `HomeSpotlight` behind it and a screenshot of the portal below.
+
+### Removed
+
+- `HeroSection` and `SpotlightBackground`, and the `theme.css`, `sidebar.css`
+  and `api-docs-responsive.css` stylesheets.
+
 ## [0.1.0] - 2026-11-05
 
 ### Added

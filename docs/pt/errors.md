@@ -7,12 +7,12 @@ description: Códigos de status e corpos de erro retornados pela Shelfline Field
 
 <script setup>
 const statusTable = [
-  { key: '200 / 201 / 204', description: 'Sucesso. 201 quando algo foi criado, 204 quando não há corpo.', color: 'green' },
-  { key: '400', description: '<code>Bad Request</code>: requisição malformada ou campo inválido.', color: 'red' },
-  { key: '401', description: '<code>Unauthorized</code>: credenciais ausentes ou inválidas.', color: 'red' },
-  { key: '404', description: '<code>Not Found</code>: o recurso não existe neste workspace.', color: 'purple' },
-  { key: '429', description: '<code>Too Many Requests</code>: aguarde o número de segundos indicado em <code>Retry-After</code>.', color: 'yellow' },
-  { key: '5xx', description: 'Erro do servidor. É seguro repetir requisições idempotentes com backoff.', color: 'pink' }
+  { key: '200 / 201 / 204', description: 'Sucesso. 201 quando algo foi criado, 204 quando não há corpo.' },
+  { key: '400', description: '<code>Bad Request</code>: requisição malformada ou campo inválido.' },
+  { key: '401', description: '<code>Unauthorized</code>: credenciais ausentes ou inválidas.' },
+  { key: '404', description: '<code>Not Found</code>: o recurso não existe neste workspace.' },
+  { key: '429', description: '<code>Too Many Requests</code>: aguarde o número de segundos indicado em <code>Retry-After</code>.' },
+  { key: '5xx', description: 'Erro do servidor. É seguro repetir requisições idempotentes com backoff.' }
 ]
 </script>
 

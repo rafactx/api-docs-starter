@@ -42,7 +42,7 @@
   "devDependencies": {
     "@scalar/api-reference": "~1.31.18",
     "@types/node": "^24.0.3",
-    "terser": "^5.44.0",
+    "lucide-static": "^1.69.0",
     "typescript": "^5.8.3",
     "vitepress": "^1.6.3",
     "vue-tsc": "^3.3.14",

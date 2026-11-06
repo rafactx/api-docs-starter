@@ -10,9 +10,9 @@ Les limites s’appliquent par workspace et par `X-Client-Name` :
 <ApiCard
   title="limites"
   :items="[
-    { key: 'Soutenu', description: '60 requêtes par minute', color: 'blue' },
-    { key: 'Rafale', description: 'jusqu’à 20 requêtes en une seconde', color: 'purple' },
-    { key: 'Limite dépassée', description: '<code>429 Too Many Requests</code> avec un en-tête <code>Retry-After</code>', color: 'yellow' }
+    { key: 'Soutenu', description: '60 requêtes par minute' },
+    { key: 'Rafale', description: 'jusqu’à 20 requêtes en une seconde' },
+    { key: 'Limite dépassée', description: '<code>429 Too Many Requests</code> avec un en-tête <code>Retry-After</code>' }
   ]"
 />
 
@@ -28,11 +28,11 @@ Les limites s’appliquent par workspace et par `X-Client-Name` :
 
 <script setup>
 const methodsTable = [
-  { key: 'GET', description: 'Lecture', color: 'blue' },
-  { key: 'POST', description: 'Création', color: 'green' },
-  { key: 'PUT', description: 'Remplacement (v1)', color: 'purple' },
-  { key: 'PATCH', description: 'Met à jour uniquement les champs envoyés (v3)', color: 'yellow' },
-  { key: 'DELETE', description: 'Suppression. N’accepte jamais de corps ; les ID vont dans le chemin ou la query string.', color: 'red' }
+  { key: 'GET', description: 'Lecture' },
+  { key: 'POST', description: 'Création' },
+  { key: 'PUT', description: 'Remplacement (v1)' },
+  { key: 'PATCH', description: 'Met à jour uniquement les champs envoyés (v3)' },
+  { key: 'DELETE', description: 'Suppression. N’accepte jamais de corps ; les ID vont dans le chemin ou la query string.' }
 ]
 </script>
 
