@@ -1,4 +1,3 @@
-/* Refined sidebar container */
 .VPSidebar {
   padding: 1.25rem 1.25rem 1.5rem;
   background-color: var(--vp-c-bg-alt);
@@ -6,11 +5,10 @@
   min-width: 240px;
   max-width: 320px;
   box-sizing: border-box;
-  /* Smooth transition for theme switching */
   transition: background-color 0.25s, border-color 0.22s;
 }
 
-/* Group titles (non-clickable, Apple-like style) */
+/* Group titles */
 .VPSidebar .group h2 {
   font-family: 'Hepta Slab', serif;
   font-size: 0.97rem;
@@ -29,18 +27,17 @@
   transition: color 0.18s, opacity 0.18s;
 }
 
-/* Spacing between groups */
 .VPSidebar .group {
   margin-bottom: 2.1rem;
 }
 
-/* Subtle separator between groups */
+/* Separator between groups */
 .VPSidebar .group + .group {
   border-top: 1px solid var(--vp-c-divider);
   padding-top: 1.1rem;
 }
 
-/* Refined menu items (only <a> links) */
+/* Links */
 .VPSidebar .item:is(a) {
   font-family: 'Poppins', sans-serif;
   font-size: 0.92rem;
@@ -60,7 +57,6 @@
   outline: none;
 }
 
-/* More subtle and elegant hover, but noticeable in light/dark */
 .VPSidebar .item:is(a):hover:not(.active),
 .VPSidebar .item:is(a):focus-visible:not(.active) {
   background-color: rgba(var(--vp-hero-primary-rgb), 0.08);
@@ -68,7 +64,6 @@
   text-shadow: 0 1px 3px rgba(120,140,180,0.04);
 }
 
-/* More refined active item */
 .VPSidebar .item:is(a).active {
   color: var(--vp-c-brand);
   background-color: rgba(var(--vp-hero-primary-rgb), 0.15);
@@ -76,7 +71,7 @@
   box-shadow: 0 1.5px 8px 0 rgba(32,94,255,0.03);
 }
 
-/* Side dot only on links */
+/* Dot before the hovered or active link */
 .VPSidebar .item:is(a)::before {
   content: '';
   width: 6px;
@@ -90,14 +85,13 @@
   flex-shrink: 0;
 }
 
-/* Activate dot on hover/active only on links */
 .VPSidebar .item:is(a):hover::before,
 .VPSidebar .item:is(a).active::before {
   opacity: 1;
   margin-right: 0.5rem;
 }
 
-/* Higher contrast in dark mode */
+/* Dark mode */
 :root.dark .VPSidebar {
   background-color: var(--vp-c-bg-alt);
   border-right-color: var(--vp-c-divider);
@@ -107,7 +101,6 @@
   opacity: 0.64;
 }
 
-/* Responsiveness: slimmer sidebar on small screens */
 @media (max-width: 900px) {
   .VPSidebar {
     padding-left: 0.7rem;
@@ -117,7 +110,6 @@
   }
 }
 
-/* Extra accessibility: clear keyboard focus */
 .VPSidebar .item:is(a):focus-visible {
   outline: 2px solid var(--vp-c-brand);
   outline-offset: 1px;
