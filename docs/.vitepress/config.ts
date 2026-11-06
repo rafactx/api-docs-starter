@@ -1,7 +1,5 @@
 import { defineConfig } from 'vitepress'
 
-const GITHUB_URL = 'https://github.com/rafactx/api-docs-starter'
-
 // Theme options that are the same in every locale.
 const shared = {
   siteTitle: false as const,
@@ -20,7 +18,7 @@ const shared = {
       </svg>
     </a>`
   },
-  socialLinks: [{ icon: 'github' as const, link: GITHUB_URL }]
+  socialLinks: [{ icon: 'github' as const, link: 'https://github.com/rafactx/api-docs-starter' }]
 }
 
 export default defineConfig({
@@ -82,15 +80,9 @@ export default defineConfig({
       themeConfig: {
         ...shared,
         nav: [
-          { text: 'Home', link: '/pt/' },
+          { text: 'Início', link: '/pt/' },
           { text: 'Guia da API', link: '/pt/intro' },
-          { text: 'API Reference', link: '/pt/api-reference' },
-          {
-            text: 'Recursos',
-            items: [
-              { text: 'GitHub', link: GITHUB_URL }
-            ]
-          }
+          { text: 'Referência da API', link: '/pt/api-reference' }
         ],
         sidebar: [
           {
@@ -132,13 +124,7 @@ export default defineConfig({
         nav: [
           { text: 'Home', link: '/en/' },
           { text: 'API Guide', link: '/en/intro' },
-          { text: 'API Reference', link: '/en/api-reference' },
-          {
-            text: 'Resources',
-            items: [
-              { text: 'GitHub', link: GITHUB_URL }
-            ]
-          }
+          { text: 'API Reference', link: '/en/api-reference' }
         ],
         sidebar: [
           {
