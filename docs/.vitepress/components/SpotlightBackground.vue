@@ -4,16 +4,13 @@
     ref="containerRef"
     :class="{ 'spotlight-active': isActive }"
   >
-    <!-- Background with spotlight -->
     <div
       class="spotlight-glow"
       :style="spotlightStyle"
     />
 
-    <!-- Gradient overlay for depth -->
     <div class="spotlight-overlay" />
 
-    <!-- Slot for content -->
     <slot />
   </div>
 </template>
@@ -36,12 +33,10 @@ const props = withDefaults(defineProps<SpotlightProps>(), {
   throttleMs: 16, // ~60fps
 })
 
-// Refs
 const containerRef = ref<HTMLElement | null>(null)
 const isActive = ref(false)
 const mousePosition = ref({ x: 50, y: 50 }) // percentages
 
-// Computed styles
 const spotlightStyle = computed(() => ({
   '--mouse-x': `${mousePosition.value.x}%`,
   '--mouse-y': `${mousePosition.value.y}%`,
@@ -49,13 +44,11 @@ const spotlightStyle = computed(() => ({
   '--intensity': props.intensity.toString(),
 }))
 
-// Control variables
 let cleanup: (() => void) | null = null
 let rafId: number | null = null
 let lastUpdate = 0
 let intersectionObserver: IntersectionObserver | null = null
 
-// Optimized throttle function
 const throttle = (func: Function, delay: number) => {
   return (...args: any[]) => {
     const now = performance.now()
@@ -71,11 +64,9 @@ const prefersReducedMotion = () => {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches
 }
 
-// Update spotlight position
 const updateSpotlight = (e: MouseEvent) => {
   if (!containerRef.value || props.disabled || prefersReducedMotion()) return
 
-  // Cancel previous RAF if pending
   if (rafId) {
     cancelAnimationFrame(rafId)
   }
@@ -106,11 +97,9 @@ const updateSpotlightTouch = (e: TouchEvent) => {
   }
 }
 
-// Throttled event handlers
 const throttledMouseMove = throttle(updateSpotlight, props.throttleMs)
 const throttledTouchMove = throttle(updateSpotlightTouch, props.throttleMs)
 
-// Mouse enter/leave handlers
 const handleMouseEnter = () => {
   isActive.value = true
 }
@@ -129,7 +118,6 @@ onMounted(() => {
   const container = containerRef.value
   if (!container) return
 
-  // Setup event listeners immediately
   const setupEventListeners = () => {
     container.addEventListener('mouseenter', handleMouseEnter, { passive: true })
     container.addEventListener('mouseleave', handleMouseLeave, { passive: true })
@@ -144,31 +132,26 @@ onMounted(() => {
     window.removeEventListener('touchmove', throttledTouchMove)
   }
 
-  // Setup immediately on first load
   setupEventListeners()
 
-  // Check if mouse is already over the component on initialization
+  // Turn the spotlight on if the hero is already in view once layout settles.
   const checkInitialMousePosition = () => {
     const rect = container.getBoundingClientRect()
-    // If component is visible in viewport, activate spotlight
     if (rect.top < window.innerHeight && rect.bottom > 0) {
       isActive.value = true
     }
   }
 
-  // Run verification after a small delay to ensure layout is ready
   setTimeout(checkInitialMousePosition, 100)
 
-  // Intersection Observer for optimization (but not as main dependency)
+  // Stop tracking the pointer while the hero is off screen.
   intersectionObserver = new IntersectionObserver(
     (entries) => {
       const [entry] = entries
       if (!entry.isIntersecting) {
-        // Only remove listeners if not visible
         removeEventListeners()
         isActive.value = false
       } else {
-        // Re-add if necessary
         setupEventListeners()
       }
     },
@@ -180,7 +163,6 @@ onMounted(() => {
 
   intersectionObserver.observe(container)
 
-  // Cleanup function
   cleanup = () => {
     if (rafId) {
       cancelAnimationFrame(rafId)
@@ -196,19 +178,6 @@ onMounted(() => {
 
 onUnmounted(() => {
   cleanup?.()
-})
-
-// Expose methods for parent components
-defineExpose({
-  setPosition: (x: number, y: number) => {
-    mousePosition.value = { x, y }
-  },
-  activate: () => {
-    isActive.value = true
-  },
-  deactivate: () => {
-    isActive.value = false
-  },
 })
 </script>
 

@@ -3,10 +3,8 @@ import { computed, onMounted, ref } from 'vue'
 import { withBase, useData } from 'vitepress'
 import SpotlightBackground from './SpotlightBackground.vue'
 
-// 1. The useData() hook gives us access to page data, including current language.
 const { lang } = useData()
 
-// 2. We create a "dictionary" with all translations.
 const translations = {
   pt: {
     headline: 'API Documentation Starter',
@@ -46,11 +44,9 @@ const translations = {
   }
 }
 
-// 3. Create a computed property that selects the correct text set based on language.
-// Falls back to English when the language is unknown.
+// Unknown languages fall back to English.
 const t = computed(() => translations[lang.value as keyof typeof translations] || translations.en)
 
-// 4. Props that don't change with language can remain.
 const props = defineProps({
   imageSrc: {
     type: String,
@@ -65,7 +61,6 @@ const props = defineProps({
 const isImageLoading = ref(true)
 const animationStarted = ref(false)
 
-// The headline now comes from our translation object 't'.
 const headlineWords = computed(() =>
   t.value.headline.trim().split(' ').filter(Boolean)
 )
