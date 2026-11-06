@@ -127,35 +127,26 @@ onMounted(() => {
   display: none;
 }
 
-/* =======================================================================
-  CUSTOM SCALAR THEME - DEEP INTEGRATION WITH VITEPRESS
-=======================================================================
-*/
+/* Map Scalar's theme variables onto VitePress's. */
 .scalar-api-reference {
-  /* === GLOBAL VARIABLES MAPPING === */
-  /* Typography: Uses VitePress theme fonts */
   --scalar-font: var(--vp-font-family-body, 'Poppins', sans-serif);
   --scalar-font-code: var(--vp-font-family-mono, monospace);
   --scalar-heading-font: var(--vp-font-family-heading, 'Hepta Slab', serif);
 
-  /* Base colors (light and dark handled by VitePress .dark selector) */
   --scalar-color-1: var(--vp-c-text-1);
   --scalar-color-2: var(--vp-c-text-2);
   --scalar-color-3: var(--vp-c-text-3);
   --scalar-color-accent: var(--vp-c-brand-1);
 
-  /* Backgrounds */
   --scalar-background-1: var(--vp-c-bg);
   --scalar-background-2: var(--vp-c-bg-alt);
   --scalar-background-3: var(--vp-c-bg-soft);
   --scalar-background-accent: var(--vp-c-brand-soft);
 
-  /* Borders and radius */
   --scalar-border-color: var(--vp-c-border);
   --scalar-border-radius: var(--vp-radius-md);
   --scalar-border-radius-lg: var(--vp-radius-lg);
 
-  /* Shadows */
   --scalar-shadow-1: var(--vp-shadow-1);
   --scalar-shadow-2: var(--vp-shadow-2);
   --scalar-shadow-3: var(--vp-shadow-3);
@@ -168,7 +159,6 @@ onMounted(() => {
   --scalar-color-purple: #af52de;
   --scalar-color-yellow: #ffcc00;
 
-  /* === SIDEBAR STYLING (to match VitePress sidebar) === */
   --scalar-sidebar-background-1: var(--vp-c-bg-alt);
   --scalar-sidebar-border-color: var(--vp-c-divider);
   --scalar-sidebar-color-1: var(--vp-c-text-1);
@@ -181,25 +171,8 @@ onMounted(() => {
   --scalar-sidebar-search-color: var(--vp-c-text-2);
 }
 
-/* Apply title font to Scalar headings */
 .scalar-api-reference .scalar-heading {
   font-family: var(--scalar-heading-font);
-}
-
-/* === Scalar component overrides === */
-
-/* Inputs and Search Button */
-.scalar-api-reference .scalar-search-input,
-.scalar-api-reference .scalar-input-base {
-  border-radius: var(--vp-radius-md) !important;
-  border: 1px solid var(--scalar-border-color) !important;
-  box-shadow: var(--vp-shadow-1) !important;
-  transition: all 150ms var(--vp-ease-out) !important;
-}
-.scalar-api-reference .scalar-search-input:focus,
-.scalar-api-reference .scalar-input-base:focus-within {
-  border-color: var(--scalar-color-accent) !important;
-  box-shadow: 0 0 0 3px var(--scalar-background-accent), var(--vp-shadow-2) !important;
 }
 
 /* Buttons */
@@ -218,21 +191,19 @@ onMounted(() => {
   transform: translateY(0);
 }
 
-/* Cards (Endpoints, Models) */
-.scalar-api-reference .scalar-card,
-.scalar-api-reference .endpoint-card {
+/* Cards */
+.scalar-api-reference .scalar-card {
   border-radius: var(--vp-radius-lg) !important;
   box-shadow: var(--vp-shadow-1) !important;
   transition: all 250ms var(--vp-ease-out) !important;
   will-change: transform, box-shadow;
 }
-.scalar-api-reference .scalar-card:hover,
-.scalar-api-reference .endpoint-card:hover {
+.scalar-api-reference .scalar-card:hover {
   transform: translateY(-2px);
   box-shadow: var(--vp-shadow-2) !important;
 }
 
-/* Code Blocks */
+/* Code blocks */
 .scalar-api-reference .scalar-code-block,
 .scalar-api-reference .scalar-code-block pre {
   border-radius: var(--vp-radius-md) !important;
