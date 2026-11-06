@@ -31,6 +31,47 @@ export default defineConfig({
     ['link', { rel: 'icon', href: '/favicon.svg' }]
   ],
 
+  // VitePress enables local search only from the root themeConfig; per-locale strings go in options.locales.
+  themeConfig: {
+    search: {
+      provider: 'local',
+      options: {
+        locales: {
+          pt: {
+            translations: {
+              button: { buttonText: 'Buscar documentos', buttonAriaLabel: 'Buscar documentos' },
+              modal: {
+                noResultsText: 'Nenhum resultado encontrado',
+                resetButtonTitle: 'Limpar busca',
+                footer: { selectText: 'para selecionar', navigateText: 'para navegar', closeText: 'para fechar' }
+              }
+            }
+          },
+          es: {
+            translations: {
+              button: { buttonText: 'Buscar en la documentación', buttonAriaLabel: 'Buscar en la documentación' },
+              modal: {
+                noResultsText: 'No se encontraron resultados',
+                resetButtonTitle: 'Borrar búsqueda',
+                footer: { selectText: 'para seleccionar', navigateText: 'para navegar', closeText: 'para cerrar' }
+              }
+            }
+          },
+          fr: {
+            translations: {
+              button: { buttonText: 'Rechercher dans la documentation', buttonAriaLabel: 'Rechercher dans la documentation' },
+              modal: {
+                noResultsText: 'Aucun résultat',
+                resetButtonTitle: 'Effacer la recherche',
+                footer: { selectText: 'pour sélectionner', navigateText: 'pour naviguer', closeText: 'pour fermer' }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+
   locales: {
     pt: {
       label: 'Português (Brasil)',
@@ -69,30 +110,6 @@ export default defineConfig({
             ]
           }
         ],
-        search: {
-          provider: 'local',
-          options: {
-            locales: {
-              pt: {
-                translations: {
-                  button: {
-                    buttonText: 'Buscar documentos',
-                    buttonAriaLabel: 'Buscar documentos'
-                  },
-                  modal: {
-                    noResultsText: 'Nenhum resultado encontrado',
-                    resetButtonTitle: 'Limpar busca',
-                    footer: {
-                      selectText: 'para selecionar',
-                      navigateText: 'para navegar',
-                      closeText: 'para fechar'
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
         outline: {
           level: [2, 3],
           label: 'Nesta página'
