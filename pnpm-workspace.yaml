@@ -5,3 +5,7 @@ onlyBuiltDependencies:
   - esbuild
   - workerd
   - vue-demi
+
+# VitePress 1.x depends on vite 5, which has open advisories fixed only in 6.4.4+.
+overrides:
+  vite: ^6.4.4
