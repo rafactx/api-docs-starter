@@ -56,7 +56,7 @@ onMounted(() => {
 <template>
   <SpotlightBackground>
     <div class="hero-container">
-      <main class="main-content">
+      <section class="main-content">
         <h1 class="headline">
           <span
             v-for="(word, idx) in headlineWords"
@@ -106,7 +106,7 @@ onMounted(() => {
             <div v-if="isImageLoading" class="image-skeleton" aria-hidden="true" />
           </div>
         </div>
-      </main>
+      </section>
     </div>
   </SpotlightBackground>
 </template>
