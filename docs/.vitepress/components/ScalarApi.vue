@@ -4,13 +4,23 @@
   </div>
   <div v-else class="scalar-api-status">
     <div class="scalar-api-spinner"></div>
-    <p>Loading API reference…</p>
+    <p>{{ messages.loading }}</p>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useData } from 'vitepress'
 import { computed, defineAsyncComponent, h, onMounted, ref } from 'vue'
+
+const MESSAGES: Record<string, { loading: string; error: string }> = {
+  en: { loading: 'Loading API reference…', error: 'Could not load the API reference. Please reload the page.' },
+  pt: { loading: 'Carregando a referência da API…', error: 'Não foi possível carregar a referência da API. Recarregue a página.' },
+  es: { loading: 'Cargando la referencia de la API…', error: 'No se pudo cargar la referencia de la API. Recarga la página.' },
+  fr: { loading: "Chargement de la référence de l'API…", error: "Impossible de charger la référence de l'API. Rechargez la page." }
+}
+
+const { isDark, lang } = useData()
+const messages = computed(() => MESSAGES[lang.value] ?? MESSAGES.en)
 
 // Scalar is large, so it is loaded only on the API reference page.
 // Loading and error states use render functions: the runtime-only Vue build cannot compile `template` strings.
@@ -19,10 +29,10 @@ const ApiReference = defineAsyncComponent({
   loader: () => import('@scalar/api-reference').then((module) => module.ApiReference),
   loadingComponent: {
     render: () =>
-      h('div', { class: 'scalar-api-status' }, [h('div', { class: 'scalar-api-spinner' }), h('p', 'Loading API reference…')])
+      h('div', { class: 'scalar-api-status' }, [h('div', { class: 'scalar-api-spinner' }), h('p', messages.value.loading)])
   },
   errorComponent: {
-    render: () => h('div', { class: 'scalar-api-status' }, h('p', 'Could not load the API reference. Please reload the page.'))
+    render: () => h('div', { class: 'scalar-api-status' }, h('p', messages.value.error))
   },
   delay: 200,
   timeout: 10000
@@ -44,7 +54,6 @@ const SPEC_BY_LANG: Record<string, string> = {
   fr: '/openapi.fr.json'
 }
 
-const { isDark, lang } = useData()
 const resolvedSpecUrl = computed(() => props.specUrl || SPEC_BY_LANG[lang.value] || SPEC_BY_LANG.en)
 
 // Scalar reads its configuration once, so the component is recreated when the theme changes.
