@@ -24,6 +24,10 @@ pnpm build      # VitePress build of every page and language; fails on dead link
 
 There is no automated test suite. For UI changes, also run `pnpm preview` and check the pages you touched in the four languages, in light and dark mode, and at a phone width.
 
+## Dependencies
+
+`@scalar/api-reference` is pinned to `~1.31.18`. Later versions render an empty API reference page with this setup, and CI would not catch it because it only typechecks and builds. Dependabot is configured to skip minor and major Scalar updates. To upgrade, bump it by hand and check `/en/api-reference` in `pnpm preview` before opening the PR.
+
 ## Pull requests
 
 - Branch from `main` and open a pull request into `main`. Direct pushes to `main` are not accepted.
