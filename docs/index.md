@@ -2,20 +2,14 @@
 layout: page
 sidebar: false
 aside: false
+head:
+  - - script
+    - {}
+    - "const l = navigator.language.slice(0, 2); location.replace(['pt', 'es', 'fr'].includes(l) ? `/${l}/` : '/en/')"
 ---
 
-<HeroSection />
+Choose a language:
 
-<script setup>
-import { onMounted } from 'vue'
-
-onMounted(() => {
-  const lang = navigator.language.slice(0, 2)
-  window.location.replace(['pt', 'es', 'fr'].includes(lang) ? `/${lang}/` : '/en/')
-})
-</script>
-
-Not redirected? Choose a language:
 - [Português](/pt/)
 - [English](/en/)
 - [Español](/es/)

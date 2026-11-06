@@ -46,7 +46,7 @@ raw spec ──► hydrate ► fix ► validate ──► docs/public/openapi.<l
 - **API reference**: `docs/.vitepress/components/ScalarApi.vue` embeds Scalar and picks the spec from the page language (`en` → `openapi.en.json`, `pt` → `openapi.pt-BR.json`, ...). Pass `spec-url` to override.
 - **Theme**: Scalar runs with `theme: 'none'` and its CSS variables are mapped onto VitePress's, so the reference follows the site's colors, fonts and dark mode. The palette lives in `docs/.vitepress/theme/theme.css`.
 - **Components**: `ApiCard` (key/description tables used in the guides), `HeroSection` + `SpotlightBackground` (landing page).
-- **Language routing**: `docs/index.md` redirects to the browser's language; `/` redirects to `/en` (`docs/public/_redirects`).
+- **Language routing**: `/` (`docs/index.md`) sends the browser to `/pt/`, `/es/` or `/fr/` based on its language, and to `/en/` otherwise. Without JavaScript it shows a list of the four languages.
 
 ## Project structure
 
@@ -59,7 +59,6 @@ docs/
 ├── public/
 │   ├── openapi.{en,pt-BR,es,fr}.json   one spec per language
 │   ├── preview.png                     hero image (also used above)
-│   ├── _redirects                      / → /en on Cloudflare
 │   └── favicon.svg, logo-{light,dark}.svg
 ├── en/ pt/ es/ fr/      intro, authentication, rate-limits, examples, pagination, errors, api-reference
 └── index.md             language redirect
