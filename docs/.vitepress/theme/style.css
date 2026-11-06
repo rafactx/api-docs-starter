@@ -296,16 +296,11 @@ select:focus {
   }
 }
 
-/* 44px touch targets on mobile */
+/* 44px touch targets on mobile. Links stay inline so they do not break up paragraphs. */
 @media (max-width: 768px) {
-  button,
-  a {
+  button {
     min-height: 44px;
     display: flex;
     align-items: center;
-  }
-
-  .VPDoc a {
-    padding: 0.25rem 0;
   }
 }

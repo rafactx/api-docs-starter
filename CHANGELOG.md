@@ -45,6 +45,9 @@ under Unreleased.
 - `/` always went to `/en` on Cloudflare (`_redirects`), so the
   browser-language redirect never ran. The redirect now runs in the browser.
 - The API reference loading and error messages were English on every locale.
+- On phones, every link was forced to a 44px flex box, which split links
+  inside paragraphs onto their own lines. The touch-target rule now applies
+  to buttons only.
 
 ### Removed
 
