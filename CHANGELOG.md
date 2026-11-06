@@ -23,7 +23,7 @@ the state described under Unreleased.
 - Landing page (`HeroSection`, `SpotlightBackground`) and the `ApiCard`
   component used in the guides.
 - Deployment to Cloudflare Workers Static Assets (`wrangler.jsonc`,
-  `pnpm deploy`), live at <https://api-docs-starter.rafactx.workers.dev>.
+  `pnpm run deploy`), live at <https://api-docs-starter.rafactx.workers.dev>.
 - `pnpm typecheck` (vue-tsc) and a CI workflow that runs install, typecheck
   and build on every pull request.
 - Dependabot, CODEOWNERS, issue forms and a pull request template.
