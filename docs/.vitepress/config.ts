@@ -1,4 +1,3 @@
-import { resolve } from 'path'
 import { defineConfig } from 'vitepress'
 
 // Shared configuration
@@ -28,8 +27,7 @@ export default defineConfig({
   head: [
     ['meta', { name: 'theme-color', content: '#646cff' }],
     ['meta', { name: 'viewport', content: 'width=device-width, initial-scale=1.0' }],
-    ['link', { rel: 'icon', href: '/favicon.svg' }],
-    ['script', { src: 'https://va.vercel-scripts.com/v1/script.js', defer: true }]
+    ['link', { rel: 'icon', href: '/favicon.svg' }]
   ],
 
   locales: {
@@ -37,7 +35,7 @@ export default defineConfig({
       label: 'Português (Brasil)',
       lang: 'pt',
       title: 'API Documentation Starter',
-      description: 'Template moderno para documentação de APIs com VitePress, Vue 3 e TailwindCSS',
+      description: 'Portal de documentação de API multilíngue com VitePress e Scalar',
       link: '/pt/',
       themeConfig: {
         siteTitle: false,
@@ -114,7 +112,7 @@ export default defineConfig({
       label: 'English',
       lang: 'en',
       title: 'API Documentation Starter',
-      description: 'Modern API documentation template with VitePress, Vue 3, and TailwindCSS',
+      description: 'Multilingual API documentation portal built with VitePress and Scalar',
       link: '/en/',
       themeConfig: {
         siteTitle: false,
@@ -167,7 +165,7 @@ export default defineConfig({
       label: 'Español',
       lang: 'es',
       title: 'API Documentation Starter',
-      description: 'Plantilla moderna para documentación de APIs con VitePress, Vue 3 y TailwindCSS',
+      description: 'Portal de documentación de API multilingüe con VitePress y Scalar',
       link: '/es/',
       themeConfig: {
         siteTitle: false,
@@ -214,7 +212,7 @@ export default defineConfig({
       label: 'Français',
       lang: 'fr',
       title: 'API Documentation Starter',
-      description: 'Template moderne pour la documentation d\'API avec VitePress, Vue 3 et TailwindCSS',
+      description: "Portail de documentation d'API multilingue avec VitePress et Scalar",
       link: '/fr/',
       themeConfig: {
         siteTitle: false,
@@ -260,7 +258,7 @@ export default defineConfig({
 
   vite: {
     ssr: {
-      noExternal: ['@scalar/api-reference', '@vueuse/motion', '@vueuse/core', 'motion-v']
+      noExternal: ['@scalar/api-reference']
     },
     build: {
       chunkSizeWarningLimit: 1000,
@@ -272,16 +270,6 @@ export default defineConfig({
           drop_debugger: true,
           pure_funcs: ['console.log', 'console.info', 'console.debug', 'console.warn']
         }
-      }
-    },
-    css: {
-      postcss: {
-        plugins: []
-      }
-    },
-    resolve: {
-      alias: {
-        '@': resolve(__dirname, './theme')
       }
     }
   }
