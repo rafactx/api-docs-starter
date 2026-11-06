@@ -20,18 +20,11 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
 
-    /* Tipos e Paths */
-    "baseUrl": ".",
-    "types": ["vitepress/client"], // Garante que os tipos do VitePress/Vue sejam encontrados
-    "paths": {
-      "@/*": ["docs/.vitepress/theme/*"] // Espelha o alias do seu vitepress.config.ts
-    }
+    "types": ["vitepress/client"]
   },
   "include": [
-    "docs/**/*.ts",
-    "docs/**/*.d.ts",
-    "docs/**/*.tsx",
-    "docs/**/*.vue"
+    "docs/.vitepress/**/*.ts",
+    "docs/.vitepress/**/*.vue"
   ],
-  "exclude": ["node_modules", "dist"]
+  "exclude": ["node_modules", "docs/.vitepress/cache", "docs/.vitepress/dist"]
 }
