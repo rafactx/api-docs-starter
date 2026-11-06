@@ -32,6 +32,8 @@ pnpm build      # static site in docs/.vitepress/dist
 pnpm preview    # serve the build locally
 ```
 
+CI runs `pnpm typecheck` and `pnpm build` on every pull request; the build also fails on dead links. There is no automated test suite, so UI changes are checked by hand (see [CONTRIBUTING.md](CONTRIBUTING.md)).
+
 ## How it works
 
 ```text
@@ -52,7 +54,7 @@ raw spec ──► hydrate ► fix ► validate ──► docs/public/openapi.<l
 docs/
 ├── .vitepress/
 │   ├── components/      ApiCard, HeroSection, ScalarApi, SpotlightBackground
-│   ├── theme/           theme.css (palette), style.css, sidebar.css, fonts.css
+│   ├── theme/           theme.css (palette), style.css, api-docs-responsive.css, sidebar.css, fonts.css
 │   └── config.ts        locales, nav, sidebars
 ├── public/
 │   ├── openapi.{en,pt-BR,es,fr}.json   one spec per language

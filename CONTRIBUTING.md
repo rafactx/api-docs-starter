@@ -19,7 +19,7 @@ These are the commands CI runs on every pull request. Run them before you push:
 ```bash
 pnpm install --frozen-lockfile
 pnpm typecheck  # vue-tsc on docs/.vitepress
-pnpm build      # VitePress build of every page and language
+pnpm build      # VitePress build of every page and language; fails on dead links
 ```
 
 There is no automated test suite. For UI changes, also run `pnpm preview` and check the pages you touched in the four languages, in light and dark mode, and at a phone width.

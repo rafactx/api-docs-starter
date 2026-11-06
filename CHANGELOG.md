@@ -31,6 +31,7 @@ the state described under Unreleased.
 ### Changed
 
 - Requires Node.js 20 or later and pnpm 10.
+- The build fails on dead links (`ignoreDeadLinks` is no longer set).
 - Scalar's loading and error states use render functions, so they display
   with the runtime-only Vue build.
 
@@ -41,5 +42,7 @@ the state described under Unreleased.
   the `lint`, `format` and `clean` scripts, which had no configuration behind
   them.
 - The unfilled `FUNDING.yml` and the generic Markdown issue templates.
+- CSS rules for classes nothing renders, unused design tokens and the unused
+  Zilla Slab font.
 
 [Unreleased]: https://github.com/rafactx/api-docs-starter/commits/main
