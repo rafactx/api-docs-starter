@@ -37,15 +37,15 @@
     "deploy": "vitepress build docs && wrangler deploy"
   },
   "dependencies": {
-    "vue": "^3.5.17"
+    "vue": "^3.5.46"
   },
   "devDependencies": {
     "@scalar/api-reference": "~1.31.18",
     "@types/node": "^24.0.3",
-    "lucide-static": "^1.69.0",
+    "lucide-static": "^1.79.0",
     "typescript": "^5.8.3",
     "vitepress": "^1.6.3",
     "vue-tsc": "^3.3.14",
-    "wrangler": "^4.158.0"
+    "wrangler": "^4.168.0"
   }
 }
